@@ -3,13 +3,21 @@ var http = require('http');
 var fs = require('fs');
 var co = require('co')
 var _ = require('lodash')
+var winston = require('winston')
 
 const Courier = require('../models/Courier')
 const CourierPool = require('../models/CourierPool')
 const DeliveryRegistry = require('../models/DeliveryRegistry')
 
-var winston = require('winston');
-winston.level = process.env.NODE_ENV === 'production' ? 'info' : 'debug';
+let level = process.env.NODE_ENV === 'production' ? 'error' : 'info'
+// level = 'debug'
+
+const logger = winston.createLogger({
+  level,
+  transports: [
+    new winston.transports.Console(),
+  ]
+})
 
 var ROOT_DIR = __dirname + '/../../..';
 
@@ -43,19 +51,19 @@ const {
   removeFromDispatching,
   removeFromWaiting,
   subscribe,
-} = require('./api')(db, redis, pub, metrics, couriers, deliveries, winston)
+} = require('./api')(db, redis, pub, metrics, couriers, deliveries, logger)
 
 preload()
   .then(() => {
 
-    winston.info('Subscribing to Redis channels...');
+    logger.info('Subscribing to Redis channels...');
     subscribe(sub)
 
     let delay = new Map()
 
     co(function* () {
 
-      winston.info('Starting loop...')
+      logger.info('Starting loop...')
 
       const distances = [500, 1000, 2000, 2500, 3000, 3500, 4000, 4500]
 
@@ -66,7 +74,7 @@ preload()
 
         // If the delivery has been delayed, skip
         // if (delay.has(delivery.id) && delay.get(delivery.id) > 0) {
-        //   winston.debug(`Skipping delivery #${delivery.id}...`)
+        //   logger.debug(`Skipping delivery #${delivery.id}...`)
         //   delay.set(delivery.id, delay.get(delivery.id) - 1)
         //   yield new Promise(resolve => setTimeout(resolve, 1000))
         //   continue
@@ -80,7 +88,7 @@ preload()
 
           if (courier) {
 
-            winston.debug(`Dispatching delivery #${delivery.id} to ${courier.username}`)
+            logger.debug(`Dispatching delivery #${delivery.id} to ${courier.username}`)
 
             courier.setDelivery(delivery.id)
             courier.setState(Courier.DISPATCHING)
@@ -88,7 +96,7 @@ preload()
             yield removeFromWaiting(delivery.id)
             yield addToDispatching(delivery.id)
 
-            winston.info(`Sending WebSocket message to ${courier.username}`)
+            logger.info(`Sending WebSocket message to ${courier.username}`)
 
             courier.send({
               type: 'delivery',
@@ -107,7 +115,7 @@ preload()
 
           } else {
             if (distance === 4500) {
-              winston.debug(`Max distance reached!`)
+              logger.debug(`Max distance reached!`)
               delay.set(delivery.id, 10)
             }
           }
@@ -161,12 +169,12 @@ wsServer.on('connection', function(ws) {
 
       if (delivery) {
         state = Courier.DELIVERING;
-        winston.debug('Courier #' + user.username + ' was delivering #' + delivery.id);
+        logger.debug('Courier #' + user.username + ' was delivering #' + delivery.id);
       } else {
-        winston.debug('Courier #' + user.username + ' was not delivering anything');
+        logger.debug('Courier #' + user.username + ' was not delivering anything');
       }
 
-      winston.info('Courier #' + user.username + ', setting state = ' + state);
+      logger.info('Courier #' + user.username + ', setting state = ' + state);
 
       const data = user.toJSON()
       const courier = new Courier({ ...data, state })
@@ -190,8 +198,8 @@ wsServer.on('connection', function(ws) {
 
         couriers.remove(courier);
 
-        winston.info('Courier #' + courier.username + ' disconnected!');
-        winston.debug('Number of couriers connected: ' + couriers.size());
+        logger.info('Courier #' + courier.username + ' disconnected!');
+        logger.debug('Number of couriers connected: ' + couriers.size());
 
         metrics.gauge('couriers.connected', couriers.size())
         pub.prefixedPublish('offline', courier.username)
