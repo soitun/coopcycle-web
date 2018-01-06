@@ -71,6 +71,7 @@
     "jquery": "^3.2.1",
     "mocha": "^3.5.3",
     "node-sass": "^4.7.2",
+    "postcss-loader": "^2.0.10",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "sass-loader": "^6.0.5",
