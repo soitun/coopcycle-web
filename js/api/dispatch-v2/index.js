@@ -84,7 +84,8 @@ sub.on('message', function(channelWithPrefix, message) {
     let parsedMessage = JSON.parse(message),
         username = parsedMessage.user.username
     if (sub.isChannel(channelWithPrefix, channel) && couriersList[username]) {
-      couriersList[username].send(message)
+      parsedMessage.type = channel
+      couriersList[username].send(JSON.stringify(parsedMessage))
     }
   })
 })
