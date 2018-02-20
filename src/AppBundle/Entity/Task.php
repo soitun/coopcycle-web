@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *   attributes={
  *     "denormalization_context"={"groups"={"task"}},
- *     "normalization_context"={"groups"={"task", "delivery", "place"}}
+ *     "normalization_context"={"groups"={"task", "place"}}
  *   },
  *   collectionOperations={
  *     "get"={"method"="GET"},
@@ -66,13 +66,6 @@ class Task
      * @Groups({"task"})
      */
     private $status = self::STATUS_TODO;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Delivery")
-     * @ORM\JoinColumn(nullable=true)
-     * @Groups({"task"})
-     */
-    private $delivery;
 
     /**
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
@@ -144,18 +137,6 @@ class Task
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getDelivery()
-    {
-        return $this->delivery;
-    }
-
-    public function setDelivery($delivery)
-    {
-        $this->delivery = $delivery;
-
-        return $this;
     }
 
     public function getType()

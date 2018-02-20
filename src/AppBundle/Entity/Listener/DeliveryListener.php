@@ -27,9 +27,7 @@ class DeliveryListener
     {
         $em = $args->getEntityManager();
 
-        foreach (Delivery::createTasks($delivery) as $task) {
-            $em->persist($task);
-        }
+        Delivery::createSteps($delivery);
 
         $deliveryEvent = new DeliveryEvent($delivery, $delivery->getStatus(), $delivery->getCourier());
         $em->persist($deliveryEvent);

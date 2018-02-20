@@ -83,13 +83,13 @@ final class TaskSubscriber implements EventSubscriberInterface
 
         $this->addEvent($task, 'ASSIGN');
 
-        if (null !== $task->getDelivery()) {
-            $this->deliveryManager->dispatch($task->getDelivery(), $user);
+        // if (null !== $task->getDelivery()) {
+        //     $this->deliveryManager->dispatch($task->getDelivery(), $user);
 
-            $this->doctrine
-                ->getManagerForClass(Delivery::class)
-                ->flush();
-        }
+        //     $this->doctrine
+        //         ->getManagerForClass(Delivery::class)
+        //         ->flush();
+        // }
 
         $this->publishTaskEventToRedis($task, $user, 'task:assign');
     }
@@ -101,14 +101,14 @@ final class TaskSubscriber implements EventSubscriberInterface
 
         $this->addEvent($task, 'UNASSIGN');
 
-        if (null !== $task->getDelivery()) {
-            $task->getDelivery()->setCourier(null);
-            $task->getDelivery()->setStatus(Delivery::STATUS_WAITING);
+        // if (null !== $task->getDelivery()) {
+        //     $task->getDelivery()->setCourier(null);
+        //     $task->getDelivery()->setStatus(Delivery::STATUS_WAITING);
 
-            $this->doctrine
-                ->getManagerForClass(Delivery::class)
-                ->flush();
-        }
+        //     $this->doctrine
+        //         ->getManagerForClass(Delivery::class)
+        //         ->flush();
+        // }
 
         $this->publishTaskEventToRedis($task, $user, 'task:unassign');
     }
@@ -127,17 +127,17 @@ final class TaskSubscriber implements EventSubscriberInterface
 
         $this->addEvent($task, 'DONE', $event->getNotes());
 
-        if (null !== $task->getDelivery()) {
-            if ($task->isPickup()) {
-                $task->getDelivery()->setStatus(Delivery::STATUS_PICKED);
-            }
-            if ($task->isDropoff()) {
-                $task->getDelivery()->setStatus(Delivery::STATUS_DELIVERED);
-            }
-            $this->doctrine
-                ->getManagerForClass(Delivery::class)
-                ->flush();
-        }
+        // if (null !== $task->getDelivery()) {
+        //     if ($task->isPickup()) {
+        //         $task->getDelivery()->setStatus(Delivery::STATUS_PICKED);
+        //     }
+        //     if ($task->isDropoff()) {
+        //         $task->getDelivery()->setStatus(Delivery::STATUS_DELIVERED);
+        //     }
+        //     $this->doctrine
+        //         ->getManagerForClass(Delivery::class)
+        //         ->flush();
+        // }
 
         $this->publishTaskEventToRedis($task, $user, 'task:done');
     }

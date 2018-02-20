@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use AppBundle\Entity\Base\Intangible;
+use AppBundle\Entity\Delivery\Step as DeliveryStep;
 use AppBundle\Entity\Model\TaxableTrait;
 use AppBundle\Validator\Constraints as CustomAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-
 
 /**
  * @see http://schema.org/ParcelDelivery Documentation on Schema.org
@@ -84,6 +84,11 @@ class Delivery extends Intangible implements TaxableInterface
      * @ApiProperty(iri="https://schema.org/Place")
      */
     private $deliveryAddress;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Delivery\Step", mappedBy="delivery", cascade={"all"})
+     */
+    private $steps;
 
     /**
      * @ORM\OneToOne(targetEntity="Order", inversedBy="delivery")
@@ -172,6 +177,7 @@ class Delivery extends Intangible implements TaxableInterface
         }
 
         $this->events = new ArrayCollection();
+        $this->steps = new ArrayCollection();
     }
 
     /**
@@ -374,6 +380,17 @@ class Delivery extends Intangible implements TaxableInterface
         return $this;
     }
 
+    public function addStep(Task $task)
+    {
+        $step = new DeliveryStep();
+        $step->setDelivery($this);
+        $step->setTask($task);
+
+        $this->steps->add($step);
+
+        return $this;
+    }
+
     public function getActualDuration()
     {
         if ($this->status === self::STATUS_DELIVERED) {
@@ -452,7 +469,7 @@ class Delivery extends Intangible implements TaxableInterface
         $this->store = $store;
     }
 
-    public static function createTasks(Delivery $delivery)
+    public static function createSteps(Delivery $delivery)
     {
         $dropoffDoneBefore = clone $delivery->getDate();
 
@@ -460,7 +477,6 @@ class Delivery extends Intangible implements TaxableInterface
         $dropoffDoneAfter->modify('-15 minutes');
 
         $dropoffTask = new Task();
-        $dropoffTask->setDelivery($delivery);
         $dropoffTask->setType(Task::TYPE_DROPOFF);
         $dropoffTask->setAddress($delivery->getDeliveryAddress());
         $dropoffTask->setDoneAfter($dropoffDoneAfter);
@@ -473,7 +489,6 @@ class Delivery extends Intangible implements TaxableInterface
         $pickupDoneAfter->modify('-15 minutes');
 
         $pickupTask = new Task();
-        $pickupTask->setDelivery($delivery);
         $pickupTask->setType(Task::TYPE_PICKUP);
         $pickupTask->setAddress($delivery->getOriginAddress());
         $pickupTask->setDoneAfter($pickupDoneAfter);
@@ -481,6 +496,7 @@ class Delivery extends Intangible implements TaxableInterface
 
         $dropoffTask->setPrevious($pickupTask);
 
-        return [ $pickupTask, $dropoffTask ];
+        $delivery->addStep($pickupTask);
+        $delivery->addStep($dropoffTask);
     }
 }
