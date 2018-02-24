@@ -36,6 +36,7 @@ var webpackConfig = {
     'js/restaurants-map': './js/app/restaurants-map/index.jsx',
     'js/task-modal': './js/app/task/modal.js',
     'js/user-tracking': './js/app/user/tracking.jsx',
+    'js/widgets/color-picker': './js/app/widgets/ColorPicker.js',
     'js/widgets/rule-picker': './js/app/widgets/RulePicker.js',
     'js/widgets/date-picker': './js/app/widgets/DatePicker.js',
     'js/widgets/opening-hours-parser': './js/app/widgets/OpeningHoursParser.jsx',
