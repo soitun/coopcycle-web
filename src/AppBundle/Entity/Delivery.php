@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-
 /**
  * @see http://schema.org/ParcelDelivery Documentation on Schema.org
  *
@@ -26,11 +25,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @ApiResource(iri="http://schema.org/ParcelDelivery",
  *   collectionOperations={},
  *   itemOperations={
- *     "get"={"method"="GET"},
- *     "accept"={"route_name"="delivery_accept"},
- *     "decline"={"route_name"="delivery_decline"},
- *     "pick"={"route_name"="delivery_pick"},
- *     "deliver"={"route_name"="delivery_deliver"}
+ *     "get"={"method"="GET"}
  *   },
  *   attributes={
  *     "denormalization_context"={"groups"={"delivery"}},
