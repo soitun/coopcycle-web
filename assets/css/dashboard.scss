@@ -218,6 +218,13 @@ html, body {
   }
 }
 
+.task__tags {
+  > i {
+    margin-left: 5px;
+  }
+
+}
+
 .taskList__summary {
   position: relative;
   &-polyline {
@@ -237,6 +244,12 @@ html, body {
         color: lighten($disabled-color, 15%);
       }
     }
+  }
+}
+
+.task-tag-list {
+  .label {
+    margin-right: 5px;
   }
 }
 
