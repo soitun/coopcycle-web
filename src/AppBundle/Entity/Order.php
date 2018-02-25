@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @ApiResource(iri="http://schema.org/Order",
  *   collectionOperations={
  *     "get"={"method"="GET"},
- *     "post"={"method"="POST", "route_name"="order_create"},
+ *     "post"={"method"="POST"},
  *     "my_orders"={"method"="GET", "route_name"="my_orders"}
  *   },
  *   itemOperations={
@@ -40,7 +40,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *     "ready"={"route_name"="order_ready"}
  *   },
  *   attributes={
- *     "denormalization_context"={"groups"={"order", "order_denormalize"}},
+ *     "denormalization_context"={"groups"={"order_create"}},
  *     "normalization_context"={"groups"={"order", "place"}}
  *   }
  * )
@@ -79,14 +79,16 @@ class Order
      *
      * @Groups({"order"})
      * @ORM\ManyToOne(targetEntity="ApiUser")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $customer;
 
     /**
      * @var Restaurant
      *
-     * @Groups({"order", "place"})
+     * @Groups({"order_create", "order", "place"})
      * @ORM\ManyToOne(targetEntity="Restaurant")
+     * @ORM\JoinColumn(nullable=false)
      * @ApiProperty(iri="https://schema.org/restaurant")
      */
     private $restaurant;
@@ -94,7 +96,7 @@ class Order
     /**
      * @var OrderItem The item ordered.
      *
-     * @Groups({"order"})
+     * @Groups({"order_create", "order"})
      * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"})
      */
     private $orderedItem;
@@ -116,7 +118,7 @@ class Order
     /**
      * @Assert\NotNull
      * @Assert\Valid
-     * @Groups({"order"})
+     * @Groups({"order_create", "order"})
      * @ORM\OneToOne(targetEntity="Delivery", mappedBy="order", cascade={"all"})
      */
     private $delivery;
@@ -441,7 +443,6 @@ class Order
      */
     public function validate(ExecutionContextInterface $context, $payload)
     {
-
         $minimumAmount = $this->getRestaurant()->getMinimumCartAmount();
 
         // Validate minimum cart amount

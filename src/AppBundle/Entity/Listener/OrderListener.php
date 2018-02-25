@@ -72,6 +72,16 @@ class OrderListener
             $delivery->setOriginAddress($order->getRestaurant()->getAddress());
         }
 
+        // HACK: set manually order_item_id on order_item_modifier
+        // hopefully this get fixed : https://github.com/api-platform/api-platform/issues/430
+        $em = $args->getEntityManager();
+        foreach ($order->getOrderedItem() as $item) {
+            foreach ($item->getModifiers() as $modifier) {
+                $modifier->setOrderItem($item);
+                $em->persist($modifier);
+            }
+        }
+
         // Apply taxes
         $this->orderManager->applyTaxes($order);
 

@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *     "get"={"method"="GET"}
  *   },
  *   attributes={
- *     "denormalization_context"={"groups"={"delivery"}},
+ *     "denormalization_context"={"groups"={"order_create"}},
  *     "normalization_context"={"groups"={"delivery", "place", "order"}}
  *   }
  * )
@@ -74,7 +74,7 @@ class Delivery extends Intangible implements TaxableInterface
     private $originAddress;
 
     /**
-     * @Groups({"place", "order"})
+     * @Groups({"order_create", "place", "order"})
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
      * @ApiProperty(iri="https://schema.org/Place")
      */
@@ -100,7 +100,7 @@ class Delivery extends Intangible implements TaxableInterface
     private $status;
 
     /**
-     * @Groups({"delivery", "order"})
+     * @Groups({"order_create", "delivery", "order"})
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(groups={"order"})
      */
