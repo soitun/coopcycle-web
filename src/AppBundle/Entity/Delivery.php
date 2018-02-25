@@ -87,12 +87,6 @@ class Delivery extends Intangible implements TaxableInterface
     private $order;
 
     /**
-     * @Groups({"order"})
-     * @ORM\ManyToOne(targetEntity="ApiUser")
-     */
-    private $courier;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Store", inversedBy="deliveries")
      */
     private $store;
@@ -271,30 +265,6 @@ class Delivery extends Intangible implements TaxableInterface
         $this->status = $status;
 
         return $this;
-    }
-
-    /**
-     * Sets courier.
-     *
-     * @param ApiUser $courier
-     *
-     * @return $this
-     */
-    public function setCourier(ApiUser $courier = null)
-    {
-        $this->courier = $courier;
-
-        return $this;
-    }
-
-    /**
-     * Gets courier.
-     *
-     * @return ApiUser
-     */
-    public function getCourier()
-    {
-        return $this->courier;
     }
 
     /**

@@ -143,34 +143,6 @@ final class OrderSubscriber implements EventSubscriberInterface
 
         $this->notificationManager->notifyOrderAccepted($order);
         $this->metricsHelper->decrementOrdersWaiting();
-
-        $originAddress = $order->getDelivery()->getOriginAddress();
-        $deliveryAddress = $order->getDelivery()->getDeliveryAddress();
-
-        $this->redis->geoadd(
-            'deliveries:geo',
-            $originAddress->getGeo()->getLongitude(),
-            $originAddress->getGeo()->getLatitude(),
-            'delivery:'.$order->getDelivery()->getId()
-        );
-
-        $this->redis->geoadd(
-            'restaurants:geo',
-            $originAddress->getGeo()->getLongitude(),
-            $originAddress->getGeo()->getLatitude(),
-            'delivery:'.$order->getDelivery()->getId()
-        );
-        $this->redis->geoadd(
-            'delivery_addresses:geo',
-            $deliveryAddress->getGeo()->getLongitude(),
-            $deliveryAddress->getGeo()->getLatitude(),
-            'delivery:'.$order->getDelivery()->getId()
-        );
-
-        $this->redis->lpush(
-            'deliveries:waiting',
-            $order->getDelivery()->getId()
-        );
     }
 
     public function onOrderCanceled(Event $event)

@@ -99,7 +99,6 @@ Feature: Orders
           "name":null
         },
         "status":"WAITING",
-        "courier":null,
         "date":"@string@.startsWith('2017-09-02')",
         "price": @double@,
         "totalExcludingTax":@double@,

@@ -11,10 +11,7 @@ class AccessControl
 {
     public static function delivery(UserInterface $user, Delivery $delivery)
     {
-        $isAdmin = $user->hasRole('ROLE_ADMIN');
-        $isCourier = $user === $delivery->getCourier();
-
-        return $isAdmin || $isCourier;
+        return $user->hasRole('ROLE_ADMIN');
     }
 
     public static function order(UserInterface $user, Order $order)

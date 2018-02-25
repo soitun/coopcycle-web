@@ -31,7 +31,7 @@ class DeliveryListener
             $em->persist($task);
         }
 
-        $deliveryEvent = new DeliveryEvent($delivery, $delivery->getStatus(), $delivery->getCourier());
+        $deliveryEvent = new DeliveryEvent($delivery, $delivery->getStatus());
         $em->persist($deliveryEvent);
 
         $em->flush();
@@ -43,7 +43,7 @@ class DeliveryListener
                 'item_operation_name' => 'get',
                 'groups' => ['delivery', 'place']
             ]),
-            'courier' => $delivery->getCourier() !== null ? $delivery->getCourier()->getId() : null,
+            'courier' => null,
             'status' => $delivery->getStatus(),
             'timestamp' => (new \DateTime())->getTimestamp(),
         ]));
@@ -56,13 +56,13 @@ class DeliveryListener
     {
         $em = $args->getEntityManager();
 
-        $deliveryEvent = new DeliveryEvent($delivery, $delivery->getStatus(), $delivery->getCourier());
+        $deliveryEvent = new DeliveryEvent($delivery, $delivery->getStatus());
         $em->persist($deliveryEvent);
         $em->flush();
 
         $this->redis->publish('delivery_events', json_encode([
             'delivery' => $delivery->getId(),
-            'courier' => $delivery->getCourier() !== null ? $delivery->getCourier()->getId() : null,
+            'courier' => null,
             'status' => $delivery->getStatus(),
             'timestamp' => (new \DateTime())->getTimestamp(),
         ]));

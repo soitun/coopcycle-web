@@ -22,7 +22,7 @@ function startWebSocket() {
   socket = io('//' + hostname, { path: '/tracking/socket.io' })
 
   socket.on('tracking', event => {
-    if (delivery.courier == event.user) {
+    if (delivery.hasOwnProperty('courier') && delivery.courier == event.user) {
       if (!courierMarker) {
         courierMarker = MapHelper.createMarker(event.coords, 'bicycle', 'circle', '#337ab7')
         courierMarker.addTo(map)
