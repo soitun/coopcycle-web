@@ -438,7 +438,6 @@ class Delivery extends Intangible implements TaxableInterface
         $dropoffDoneAfter->modify('-15 minutes');
 
         $dropoffTask = new Task();
-        $dropoffTask->setDelivery($delivery);
         $dropoffTask->setType(Task::TYPE_DROPOFF);
         $dropoffTask->setAddress($delivery->getDeliveryAddress());
         $dropoffTask->setDoneAfter($dropoffDoneAfter);
@@ -451,7 +450,6 @@ class Delivery extends Intangible implements TaxableInterface
         $pickupDoneAfter->modify('-15 minutes');
 
         $pickupTask = new Task();
-        $pickupTask->setDelivery($delivery);
         $pickupTask->setType(Task::TYPE_PICKUP);
         $pickupTask->setAddress($delivery->getOriginAddress());
         $pickupTask->setDoneAfter($pickupDoneAfter);

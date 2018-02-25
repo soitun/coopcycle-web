@@ -68,13 +68,6 @@ class Task
     private $status = self::STATUS_TODO;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Delivery")
-     * @ORM\JoinColumn(nullable=true)
-     * @Groups({"task"})
-     */
-    private $delivery;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
      * @Groups({"task"})
      */
@@ -144,18 +137,6 @@ class Task
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getDelivery()
-    {
-        return $this->delivery;
-    }
-
-    public function setDelivery($delivery)
-    {
-        $this->delivery = $delivery;
-
-        return $this;
     }
 
     public function getType()

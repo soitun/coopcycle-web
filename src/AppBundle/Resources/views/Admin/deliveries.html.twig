@@ -48,11 +48,8 @@
           {{ task.address.streetAddress }}
         </td>
         <td width="5%" class="text-right">
-          {% if task.delivery is not null %}
-          <a href="{{ path(routes.view, { id: task.delivery.id }) }}"
-            title="{% trans with { '%id%': task.delivery.id } %}Delivery #%id%{% endtrans %}">
-            <i class="fa fa-exchange"></i>
-          </a>
+          {% if task.hasPrevious %}
+          <i class="fa fa-exchange"></i>
           {% endif %}
         </td>
       </tr>
