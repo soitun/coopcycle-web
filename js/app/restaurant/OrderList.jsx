@@ -72,7 +72,7 @@ class OrderList extends React.Component
       <tr key={ order['@id'] } onClick={ () => this.props.onOrderClick(order) } style={{ cursor: 'pointer' }} className={ className }>
         <td>{ order['@id'].replace('/api/orders/', '') }</td>
         <td><OrderLabel order={ order } /></td>
-        <td><i className="fa fa-clock-o" aria-hidden="true"></i>  { moment(order.preparationDate).format('lll') }</td>
+        <td><i className="fa fa-clock-o" aria-hidden="true"></i>  { moment(order.readyAt).format('lll') }</td>
         <td className="text-right">{ numeral(order.totalIncludingTax).format('0,0.00 $') }</td>
         <td className="text-right">{ numeral(order.delivery.totalIncludingTax).format('0,0.00 $') }</td>
         <td className="text-right">{ order.customer.username }</td>
@@ -90,11 +90,11 @@ class OrderList extends React.Component
       )
     }
 
-    const preparationDate = order => moment(order.preparationDate).format('YYYY-MM-DD')
-    const ordersByDate = _.mapValues(_.groupBy(orders, preparationDate), orders => {
+    const readyAt = order => moment(order.readyAt).format('YYYY-MM-DD')
+    const ordersByDate = _.mapValues(_.groupBy(orders, readyAt), orders => {
       orders.sort((a, b) => {
-        const dateA = moment(a.preparationDate);
-        const dateB = moment(b.preparationDate);
+        const dateA = moment(a.readyAt);
+        const dateB = moment(b.readyAt);
         if (dateA === dateB) {
           return 0;
         }

@@ -19,9 +19,7 @@ class OrderTest extends BaseTest
     {
         parent::setUp();
 
-        $this->validator = Validation::createValidatorBuilder()
-            ->enableAnnotationMapping()
-            ->getValidator();
+        $this->validator = static::$kernel->getContainer()->get('validator');
 
         Carbon::setTestNow(Carbon::create(2017, 9, 2, 11, 0));
     }
@@ -130,30 +128,24 @@ class OrderTest extends BaseTest
         $restaurant->setContract($contract);
 
         $delivery = new Delivery();
+        $delivery->setDuration(15 * 60);
 
         $order = new Order();
         $order->setDelivery($delivery);
         $order->setRestaurant($restaurant);
-
+        $order->setReadyAt(new \DateTime('2017-09-02 12:15:00'));
         $delivery->setDate(new \DateTime('2017-09-02 12:30:00'));
 
-        // With "Default" group,
-        // delivery.distance & delivery.duration are optional
-        $errors = $this->validator->validate($order);
-        $this->assertEquals(0, count($errors));
+        $delivery->setDistance(4500);
+        $violations = $this->validator->validate($order);
+        $errors = ValidationUtils::serializeValidationErrors($violations);
+        $this->assertArrayHasKey('delivery.deliveryAddress', $errors);
+        $this->assertContains('This address is too far', $errors['delivery.deliveryAddress']);
 
-        // With "Order" group,
-        // delivery.distance & delivery.duration are mandatory
-        $errors = $this->validator->validate($order, null, ['order']);
-
-        $this->assertEquals(ValidationUtils::serializeValidationErrors($errors)['delivery.distance'][0], 'This value should not be blank.');
-
-        // Order is valid
-        $delivery->setDuration(30);
         $delivery->setDistance(1500);
-
-        $errors = $this->validator->validate($order, null, ['order']);
-        $this->assertEquals(0, count($errors));
+        $violations = $this->validator->validate($order);
+        $errors = ValidationUtils::serializeValidationErrors($violations);
+        $this->assertArrayNotHasKey('delivery.deliveryAddress', $errors);
     }
 
     public function testDateValidation()
@@ -173,23 +165,37 @@ class OrderTest extends BaseTest
         $order->setDelivery($delivery);
         $order->setRestaurant($restaurant);
 
-        $delivery->setDuration(30);
+        $delivery->setDuration(15 * 60); // It takes 15 minutes to deliver
         $delivery->setDistance(1500);
 
+        Carbon::setTestNow(Carbon::create(2017, 9, 2, 11, 30));
+
         // Restaurant is open
-        $delivery->setDate(new \DateTime('2017-09-02 12:30:00'));
-        $errors = $this->validator->validate($order, null, ['order']);
+        $order->setReadyAt(new \DateTime('2017-09-02 12:30:00'));
+        $delivery->setDate(new \DateTime('2017-09-02 12:50:00'));
+
+        $errors = $this->validator->validate($order);
         $this->assertEquals(0, count($errors));
 
         // Restaurant is closed
-        $delivery->setDate(new \DateTime('2017-09-03 12:30:00'));
-        $errors = $this->validator->validate($order, null, ['order']);
-        $this->assertEquals('Restaurant is closed at 2017-09-03 12:30:00', ValidationUtils::serializeValidationErrors($errors)['delivery.date'][0]);
+        $order->setReadyAt(new \DateTime('2017-09-03 12:30:00'));
+        $delivery->setDate(new \DateTime('2017-09-03 12:50:00'));
 
-        // Delivery is too soon
-        Carbon::setTestNow(Carbon::create(2017, 9, 3, 12, 25));
-        $errors = $this->validator->validate($order, null, ['order']);
-        $this->assertContains('Delivery date 2017-09-03 12:30:00 is invalid', ValidationUtils::serializeValidationErrors($errors)['delivery.date']);
+        $violations = $this->validator->validate($order);
+        $errors = ValidationUtils::serializeValidationErrors($violations);
+        $this->assertArrayHasKey('delivery.date', $errors);
+        $this->assertContains('Restaurant is closed at 2017-09-03 12:30:00', $errors['delivery.date']);
+
+        // Carbon::setTestNow(Carbon::create(2017, 9, 3, 12, 25));
+
+        // // Delivery is too soon
+        // $order->setReadyAt(new \DateTime('2017-09-03 12:30:00'));
+        // $delivery->setDate(new \DateTime('2017-09-03 12:50:00'));
+
+        // $violations = $this->validator->validate($order);
+        // $errors = ValidationUtils::serializeValidationErrors($violations);
+        // $this->assertArrayHasKey('delivery.date', $errors);
+        // $this->assertContains('Delivery date 2017-09-03 12:50:00 is invalid', $errors['delivery.date']);
     }
 
     public function testMinimumAmountValidation()
@@ -213,8 +219,10 @@ class OrderTest extends BaseTest
 
         $order->setRestaurant($restaurant);
 
-        $errors = $this->validator->validate($order, null, ['order']);
-        $this->assertEquals(1, count($errors));
+        $violations = $this->validator->validate($order);
+        $errors = ValidationUtils::serializeValidationErrors($violations);
+        $this->assertArrayHasKey('totalIncludingTax', $errors);
+        $this->assertContains('The minimum amount is 20', $errors['totalIncludingTax']);
     }
 
     public function testEventListener()
@@ -235,12 +243,13 @@ class OrderTest extends BaseTest
 
         $delivery = new Delivery();
         $delivery->setDate(new \DateTime('today 12:30:00'));
-        $delivery->setDuration(30);
+        $delivery->setDuration(15 * 60);
         $delivery->setDistance(1500);
 
         $order = new Order();
         $order->setDelivery($delivery);
         $order->setRestaurant($restaurant);
+        $order->setReadyAt(new \DateTime('today 12:15:00'));
 
         $pizza = $this->createMenuItem('Pizza', 10.00, $foodTaxCategory);
 

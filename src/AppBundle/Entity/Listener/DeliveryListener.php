@@ -27,13 +27,9 @@ class DeliveryListener
     {
         $em = $args->getEntityManager();
 
-        foreach (Delivery::createTasks($delivery) as $task) {
-            $em->persist($task);
-        }
-
         $deliveryEvent = new DeliveryEvent($delivery, $delivery->getStatus());
-        $em->persist($deliveryEvent);
 
+        $em->persist($deliveryEvent);
         $em->flush();
 
         $this->redis->publish('delivery_events', json_encode([

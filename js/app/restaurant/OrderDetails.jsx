@@ -146,7 +146,7 @@ class OrderList extends React.Component {
           <p>
             <span className="text-left"><OrderLabel order={ order } /></span>
             <strong className="pull-right text-success">
-                { moment(order.preparationDate).format('lll') }  <i className="fa fa-clock-o" aria-hidden="true"></i>
+                { moment(order.readyAt).format('lll') }  <i className="fa fa-clock-o" aria-hidden="true"></i>
             </strong>
           </p>
           { order.customer.telephone &&

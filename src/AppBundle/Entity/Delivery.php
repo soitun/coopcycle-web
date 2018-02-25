@@ -4,17 +4,17 @@ namespace AppBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use AppBundle\Entity\Base\Intangible;
 use AppBundle\Entity\Model\TaxableTrait;
-use AppBundle\Validator\Constraints as CustomAssert;
+use AppBundle\Entity\Delivery\Item as DeliveryItem;
+use AppBundle\Entity\Task\CollectionInterface as TaskCollectionInterface;
+use AppBundle\Entity\Task\CollectionTrait as TaskCollectionTrait;
+use AppBundle\Validator\Constraints\Delivery as AssertDelivery;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Taxation\Model\TaxCategoryInterface;
 use Sylius\Component\Taxation\Model\TaxableInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
@@ -32,12 +32,11 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *     "normalization_context"={"groups"={"delivery", "place", "order"}}
  *   }
  * )
- *
- * @CustomAssert\IsValidDeliveryDate(groups="order")
- *
+ * @AssertDelivery
  */
-class Delivery extends Intangible implements TaxableInterface
+class Delivery implements TaskCollectionInterface, TaxableInterface
 {
+    use TaskCollectionTrait;
     use TaxableTrait;
 
     // default status when the delivery is created along the order
@@ -76,6 +75,11 @@ class Delivery extends Intangible implements TaxableInterface
     private $deliveryAddress;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Delivery\Item", mappedBy="delivery", cascade={"all"})
+     */
+    private $items;
+
+    /**
      * @ORM\OneToOne(targetEntity="Order", inversedBy="delivery")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      */
@@ -96,21 +100,8 @@ class Delivery extends Intangible implements TaxableInterface
 
     /**
      * @Groups({"order_create"})
-     * @Assert\NotBlank(groups={"order"})
      */
     private $date;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank(groups={"order"})
-     */
-    private $distance;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank(groups={"order"})
-     */
-    private $duration;
 
     /**
      * @ORM\OneToMany(targetEntity="DeliveryEvent", mappedBy="delivery")
@@ -214,30 +205,6 @@ class Delivery extends Intangible implements TaxableInterface
         return $this;
     }
 
-    public function getDistance()
-    {
-        return $this->distance;
-    }
-
-    public function setDistance($distance)
-    {
-        $this->distance = $distance;
-
-        return $this;
-    }
-
-    public function getDuration()
-    {
-        return $this->duration;
-    }
-
-    public function setDuration($duration)
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
     public function isCalculated()
     {
         return null !== $this->duration && null !== $this->distance;
@@ -325,33 +292,6 @@ class Delivery extends Intangible implements TaxableInterface
         }
     }
 
-    /**
-     * Custom order validation.
-     * @Assert\Callback(groups={"order"})
-     */
-    public function validate(ExecutionContextInterface $context, $payload)
-    {
-        $order = $this->getOrder();
-
-        // Validate distance
-        $maxDistance = $order->getRestaurant()->getMaxDistance();
-
-        $constraint = new Assert\LessThan(['value' => $maxDistance]);
-        $context
-            ->getValidator()
-            ->inContext($context)
-            ->atPath('distance')
-            ->validate($this->distance, $constraint, [Constraint::DEFAULT_GROUP]);
-
-        // Validate opening hours
-        if (!$order->getRestaurant()->isOpen($this->getDate())) {
-             $context
-                ->buildViolation(sprintf('Restaurant is closed at %s', $this->getDate()->format('Y-m-d H:i:s')))
-                ->atPath('date')
-                ->addViolation();
-        }
-    }
-
     public function getVehicle()
     {
         return $this->vehicle;
@@ -378,6 +318,11 @@ class Delivery extends Intangible implements TaxableInterface
     public function setStore($store)
     {
         $this->store = $store;
+    }
+
+    public function createItem()
+    {
+        return new DeliveryItem();
     }
 
     public static function createTasks(Delivery $delivery)

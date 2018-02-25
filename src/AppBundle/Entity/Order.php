@@ -6,16 +6,15 @@ use AppBundle\Entity\Cart\CartItem;
 use AppBundle\Entity\Menu\Modifier;
 use AppBundle\Entity\Base\MenuItem;
 use AppBundle\Entity\Model\TaxableTrait;
+use AppBundle\Validator\Constraints\Order as AssertOrder;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * An order is a confirmation of a transaction (a receipt), which can contain multiple line items, each represented by an Offer that has been accepted by the customer.
@@ -44,6 +43,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *     "normalization_context"={"groups"={"order", "place"}}
  *   }
  * )
+ * @AssertOrder
  */
 class Order
 {
@@ -428,29 +428,8 @@ class Order
         $this->uuid = $uuid;
     }
 
-    public function getPreparationDate()
+    public function getDuration()
     {
-        $preparationDate = clone $this->delivery->getDate();
-
-        $preparationDate->modify(sprintf('-%d minutes', Restaurant::PREPARATION_AND_DELIVERY_DELAY));
-
-        return $preparationDate;
-    }
-
-    /**
-     * Custom order validation.
-     * @Assert\Callback(groups={"order"})
-     */
-    public function validate(ExecutionContextInterface $context, $payload)
-    {
-        $minimumAmount = $this->getRestaurant()->getMinimumCartAmount();
-
-        // Validate minimum cart amount
-        $constraint = new Assert\GreaterThanOrEqual(['value' => $minimumAmount]);
-        $context
-            ->getValidator()
-            ->inContext($context)
-            ->atPath('total')
-            ->validate($this->getItemsTotal(), $constraint, [Constraint::DEFAULT_GROUP]);
+        return Restaurant::PREPARATION_DELAY * 60;
     }
 }

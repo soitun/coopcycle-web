@@ -38,15 +38,14 @@ Feature: Orders
     {
       "@context":"/api/contexts/Order",
       "@id":"@string@.startsWith('/api/orders')",
-      "id": @integer@,
       "@type":"http://schema.org/Order",
+      "id": @integer@,
       "customer":{
         "@id":"@string@.startsWith('/api/api_users')",
         "@type":"ApiUser",
         "username":"bob",
         "telephone": "+33612345678"
       },
-      "createdAt": @string@,
       "restaurant":{
         "@id":"/api/restaurants/1",
         "@type":"http://schema.org/Restaurant",
@@ -55,26 +54,7 @@ Feature: Orders
         "minimumCartAmount":@integer@,
         "flatDeliveryPrice":@double@
       },
-      "orderedItem":[
-        {
-          "@id":"@string@.startsWith('/api/order_items')",
-          "@type":"http://schema.org/OrderItem",
-          "menuItem":"/api/menu_items/1",
-          "quantity":1,
-          "name":@string@,
-          "price":@number@,
-          "modifiers": @array@
-        },
-        {
-          "@id":"@string@.startsWith('/api/order_items')",
-          "@type":"http://schema.org/OrderItem",
-          "menuItem":"/api/menu_items/2",
-          "quantity":2,
-          "name":@string@,
-          "price":@number@,
-          "modifiers": @array@
-        }
-      ],
+      "orderedItem":@array@,
       "delivery":{
         "@id":"@string@.startsWith('/api/deliveries')",
         "@type":"http://schema.org/ParcelDelivery",
@@ -89,7 +69,8 @@ Feature: Orders
       "totalIncludingTax":@double@,
       "publicUrl":@string@,
       "status":"CREATED",
-      "preparationDate":"@string@.startsWith('2017-09-02T11:45:00')"
+      "createdAt": @string@,
+      "readyAt":"@string@.startsWith('2017-09-02T12:18')"
     }
     """
 
@@ -182,14 +163,14 @@ Feature: Orders
       "hydra:description":@string@,
       "violations":[
         {
-          "propertyPath":"delivery.distance",
-          "message":"This value should be less than 3000."
+          "propertyPath":"delivery.deliveryAddress",
+          "message":"This address is too far"
         }
       ]
     }
     """
 
-  Scenario: the delivery is scheduled too soon
+  Scenario: Delivery is scheduled too soon
     Given the database is empty
     And the current time is "2017-09-02 12:00:00"
     And the fixtures file "restaurants.yml" is loaded
@@ -237,7 +218,7 @@ Feature: Orders
     }
     """
 
-  Scenario: the delivery is in the past
+  Scenario: Delivery is in the past
     Given the database is empty
     And the current time is "2017-09-03 12:00:00"
     And the fixtures file "restaurants.yml" is loaded

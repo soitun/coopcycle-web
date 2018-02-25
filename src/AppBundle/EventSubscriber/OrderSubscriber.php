@@ -2,13 +2,14 @@
 
 namespace AppBundle\EventSubscriber;
 
+use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException;
+use ApiPlatform\Core\EventListener\EventPriorities;
 use AppBundle\Event\OrderAcceptEvent;
 use AppBundle\Event\OrderCancelEvent;
 use AppBundle\Event\OrderCreateEvent;
-use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException;
-use ApiPlatform\Core\EventListener\EventPriorities;
+use AppBundle\Event\TaskCollectionChangeEvent;
+use AppBundle\Entity\Delivery;
 use AppBundle\Entity\Order;
-use AppBundle\Service\DeliveryManager;
 use AppBundle\Service\NotificationManager;
 use AppBundle\Utils\MetricsHelper;
 use M6Web\Component\Statsd\Client as StatsdClient;
@@ -25,7 +26,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class OrderSubscriber implements EventSubscriberInterface
 {
     private $tokenStorage;
-    private $deliveryManager;
     private $notificationManager;
     private $validator;
     private $metricsHelper;
@@ -33,13 +33,12 @@ final class OrderSubscriber implements EventSubscriberInterface
     private $logger;
 
     public function __construct(TokenStorageInterface $tokenStorage,
-        DeliveryManager $deliveryManager, NotificationManager $notificationManager,
+        NotificationManager $notificationManager,
         ValidatorInterface $validator,
         MetricsHelper $metricsHelper, Redis $redis,
         LoggerInterface $logger)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->deliveryManager = $deliveryManager;
         $this->notificationManager = $notificationManager;
         $this->validator = $validator;
         $this->metricsHelper = $metricsHelper;
@@ -52,11 +51,11 @@ final class OrderSubscriber implements EventSubscriberInterface
         return [
             KernelEvents::VIEW => [
                 ['preValidate', EventPriorities::PRE_VALIDATE],
-                ['postValidate', EventPriorities::POST_VALIDATE],
             ],
             OrderCreateEvent::NAME => 'onOrderCreated',
             OrderAcceptEvent::NAME => 'onOrderAccepted',
             OrderCancelEvent::NAME => 'onOrderCanceled',
+            TaskCollectionChangeEvent::NAME => 'onTaskCollectionChange',
         ];
     }
 
@@ -90,39 +89,10 @@ final class OrderSubscriber implements EventSubscriberInterface
             $delivery->setDate(new \DateTime($delivery->getDate()));
         }
 
-        // Make sure customer is set
-        if (null === $order->getCustomer()) {
-            $order->setCustomer($this->getUser());
-        }
-
         // Make sure models are associated
         $delivery->setOrder($order);
 
-        // Make sure originAddress is set
-        if (null === $delivery->getOriginAddress()) {
-            $delivery->setOriginAddress($order->getRestaurant()->getAddress());
-        }
-
-        if (!$delivery->isCalculated()) {
-            $this->deliveryManager->calculate($delivery);
-        }
-
         $event->setControllerResult($order);
-    }
-
-    public function postValidate(GetResponseForControllerResultEvent $event)
-    {
-        $order = $event->getControllerResult();
-        $method = $event->getRequest()->getMethod();
-
-        if (!$order instanceof Order || Request::METHOD_POST !== $method) {
-            return;
-        }
-
-        $errors = $this->validator->validate($order, null, ['order']);
-        if (count($errors) > 0) {
-            throw new ValidationException($errors);
-        }
     }
 
     public function onOrderCreated(Event $event)
@@ -155,5 +125,24 @@ final class OrderSubscriber implements EventSubscriberInterface
         $this->metricsHelper->decrementOrdersWaiting();
 
         $this->redis->lrem('deliveries:waiting', 0, $order->getDelivery()->getId());
+    }
+
+    public function onTaskCollectionChange(TaskCollectionChangeEvent $event)
+    {
+        $taskCollection = $event->getTaskCollection();
+
+        if ($taskCollection instanceof Delivery) {
+
+            $delivery = $taskCollection;
+            $order = $delivery->getOrder();
+
+            if (null !== $order && null === $order->getReadyAt()) {
+                // Given the time it takes to deliver,
+                // calculate when the order should be ready
+                $readyAt = clone $delivery->getDate();
+                $readyAt->modify(sprintf('-%d seconds', $delivery->getDuration()));
+                $order->setReadyAt($readyAt);
+            }
+        }
     }
 }

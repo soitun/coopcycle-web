@@ -81,7 +81,6 @@ trait DeliveryTrait
                     $delivery->setStore($store);
                 }
 
-                $deliveryManager->calculate($delivery);
                 $deliveryManager->applyTaxes($delivery);
 
                 if ($isNew) {

@@ -24,7 +24,6 @@ class OrderNormalizer implements NormalizerInterface, DenormalizerInterface
 
         $data['total'] = $object->getTotal();
         $data['publicUrl'] = $this->router->generate('order_public', ['uuid' => $object->getUuid()], true);
-        $data['preparationDate'] = $object->getPreparationDate()->format(\DateTime::ATOM);
 
         $data['totalExcludingTax'] = $object->getTotalExcludingTax();
         $data['totalTax'] = $object->getTotalTax();
