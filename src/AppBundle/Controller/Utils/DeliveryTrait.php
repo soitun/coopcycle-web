@@ -75,8 +75,8 @@ trait DeliveryTrait
                 if ($store) {
                     // if the user is not admin, he cannot override the set pricing
                     if (!$user->hasRole('ROLE_ADMIN')) {
-                        $price = $deliveryManager->getPrice($delivery, $store->getPricingRuleSet());
-                        $delivery->setPrice($price);
+                        $totalIncludingTax = $deliveryManager->getPrice($delivery, $store->getPricingRuleSet());
+                        $delivery->setTotalIncludingTax($totalIncludingTax);
                     }
                     $delivery->setStore($store);
                 }

@@ -58,12 +58,12 @@ if (storeSearch) {
 }
 
 function disableForm() {
-  $('#delivery_price').attr('disabled', true)
+  $('#delivery_totalIncludingTax').attr('disabled', true)
   $('#delivery-submit').attr('disabled', true)
 }
 
 function enableForm() {
-  $('#delivery_price').attr('disabled', false)
+  $('#delivery_totalIncludingTax').attr('disabled', false)
   $('#delivery-submit').attr('disabled', false)
 }
 
@@ -88,11 +88,11 @@ function calculatePrice(distance, delivery) {
       // we couldn't calculate the price
       if (isNaN(price)) {
         $('#no-price-warning').show()
-        if (!$('#delivery_price').val()) {
-          $('#delivery_price').focus()
+        if (!$('#delivery_totalIncludingTax').val()) {
+          $('#delivery_totalIncludingTax').focus()
         }
       } else {
-        $('#delivery_price').val(numeral(price).format('0,0.00'))
+        $('#delivery_totalIncludingTax').val(numeral(price).format('0,0.00'))
       }
     })
     .catch(e => enableForm())

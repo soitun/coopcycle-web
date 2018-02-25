@@ -45,13 +45,12 @@ class DeliveryManager
 
         $taxRate = $this->taxRateResolver->resolve($delivery);
 
-        $totalIncludingTax = $delivery->getPrice();
+        $totalIncludingTax = $delivery->getTotalIncludingTax();
         $totalTax = $this->calculator->calculate($totalIncludingTax, $taxRate);
         $totalExcludingTax = $totalIncludingTax - $totalTax;
 
         $delivery->setTotalExcludingTax($totalExcludingTax);
         $delivery->setTotalTax($totalTax);
-        $delivery->setTotalIncludingTax($totalIncludingTax);
     }
 
     public function getPrice(Delivery $delivery, PricingRuleSet $ruleSet)

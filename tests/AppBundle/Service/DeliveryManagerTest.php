@@ -87,7 +87,7 @@ class DeliveryManagerTest extends BaseTest
 
         // 3.5 - (3.5 / (1 + 0.20)) = 0.58
         $delivery = new Delivery();
-        $delivery->setPrice(3.50);
+        $delivery->setTotalIncludingTax(3.50);
 
         $deliveryManager->applyTaxes($delivery);
 

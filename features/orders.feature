@@ -78,29 +78,7 @@ Feature: Orders
       "delivery":{
         "@id":"@string@.startsWith('/api/deliveries')",
         "@type":"http://schema.org/ParcelDelivery",
-        "originAddress":{
-          "@id":"@string@.startsWith('/api/addresses')",
-          "@type":"http://schema.org/Place",
-          "geo":{
-            "latitude":48.864577,
-            "longitude":2.333338
-          },
-          "streetAddress":"272, rue Saint Honoré 75001 Paris 1er",
-          "name":null
-        },
-        "deliveryAddress":{
-          "@id":"@string@.startsWith('/api/addresses')",
-          "@type":"http://schema.org/Place",
-          "geo":{
-            "latitude":48.855799,
-            "longitude":2.359207
-          },
-          "streetAddress":"1, rue de Rivoli",
-          "name":null
-        },
         "status":"WAITING",
-        "date":"@string@.startsWith('2017-09-02')",
-        "price": @double@,
         "totalExcludingTax":@double@,
         "totalTax":@double@,
         "totalIncludingTax":@double@

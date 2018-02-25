@@ -67,16 +67,11 @@ class Delivery extends Intangible implements TaxableInterface
     private $id;
 
     /**
-     * @Groups({"place", "order"})
-     * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
-     * @ApiProperty(iri="https://schema.org/Place")
      */
     private $originAddress;
 
     /**
-     * @Groups({"order_create", "place", "order"})
-     * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
-     * @ApiProperty(iri="https://schema.org/Place")
+     * @Groups({"order_create"})
      */
     private $deliveryAddress;
 
@@ -100,8 +95,7 @@ class Delivery extends Intangible implements TaxableInterface
     private $status;
 
     /**
-     * @Groups({"order_create", "delivery", "order"})
-     * @ORM\Column(type="datetime")
+     * @Groups({"order_create"})
      * @Assert\NotBlank(groups={"order"})
      */
     private $date;
@@ -123,12 +117,6 @@ class Delivery extends Intangible implements TaxableInterface
      * @ORM\OrderBy({"createdAt" = "ASC"})
      */
     private $events;
-
-    /**
-     * @Groups({"order"})
-     * @ORM\Column(type="float")
-     */
-    private $price;
 
     /**
      * @ORM\ManyToOne(targetEntity="Sylius\Component\Taxation\Model\TaxCategoryInterface")
@@ -276,25 +264,17 @@ class Delivery extends Intangible implements TaxableInterface
     }
 
     /**
-     * @return float
+     * @deprecated
      */
     public function getPrice()
     {
-        return $this->price;
-    }
-
-    /**
-     * @param float $price
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
+        return $this->getTotalIncludingTax();
     }
 
     public function setPriceFromOrder(Order $order)
     {
         if (null !== $order->getRestaurant()) {
-            $this->price = $order->getRestaurant()->getFlatDeliveryPrice();
+            $this->setTotalIncludingTax($order->getRestaurant()->getFlatDeliveryPrice());
         }
     }
 

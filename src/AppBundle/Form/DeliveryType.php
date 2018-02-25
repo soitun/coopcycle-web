@@ -39,7 +39,7 @@ class DeliveryType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd HH:mm:ss'
             ])
-            ->add('price', MoneyType::class)
+            ->add('totalIncludingTax', MoneyType::class)
             ->add('distance', NumberType::class)
             ->add('duration', NumberType::class);
 
@@ -70,10 +70,10 @@ class DeliveryType extends AbstractType
             FormEvents::POST_SET_DATA,
             function (FormEvent $event) use ($options, $isAdmin) {
                 if(!$isAdmin) {
-                    $priceFieldConfig = $event->getForm()->get('price')->getConfig();
-                    $options = $priceFieldConfig->getOptions();
+                    $config = $event->getForm()->get('totalIncludingTax')->getConfig();
+                    $options = $config->getOptions();
                     $options['attr'] = ['disabled' => true];
-                    $event->getForm()->add('price', MoneyType::class, $options);
+                    $event->getForm()->add('totalIncludingTax', MoneyType::class, $options);
                 }
             }
         );
