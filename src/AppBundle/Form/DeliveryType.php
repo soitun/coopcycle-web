@@ -40,8 +40,8 @@ class DeliveryType extends AbstractType
                 'format' => 'yyyy-MM-dd HH:mm:ss'
             ])
             ->add('price', MoneyType::class)
-            ->add('distance', NumberType::class)
-            ->add('duration', NumberType::class);
+            ->add('distance', NumberType::class, ['required' => false])
+            ->add('duration', NumberType::class, ['required' => false]);
 
         if (!empty($options['vehicle_choices'])) {
             $builder->add('vehicle', ChoiceType::class, [

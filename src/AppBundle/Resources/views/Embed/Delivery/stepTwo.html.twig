@@ -1,0 +1,108 @@
+{% extends "AppBundle::base.html.twig" %}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block banner %}{% endblock %}
+{% block menu %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body %}
+
+<div style="padding: 20px;">
+
+  <ol class="breadcrumb">
+    <li><a href="{{ path('embed_delivery') }}">Informations</a></li>
+    <li>Compte</li>
+    <li>Résumé</li>
+  </ol>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Résumé</div>
+    {# <div class="panel-body">
+      <p>...</p>
+    </div> #}
+    <table class="table">
+      <tbody>
+        <tr>
+          <th width="40%">Horaire de livraison</th>
+          <td>{{ delivery.date|localizeddate('medium', 'short') }}</td>
+        </tr>
+        <tr>
+          <th>Distance</th>
+          <td>{{ delivery.distance }}</td>
+        </tr>
+        <tr>
+          <th>Durée</th>
+          <td>{{ delivery.duration }}</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  {# {{ form_start(form, { action: path('embed_delivery_account') }) }}
+
+    {{ form_row(form.date) }}
+    <div id="datepicker"></div>
+
+    <hr>
+
+    {{ form_row(form.originAddress.streetAddress) }}
+    {{ form_row(form.originAddress.description) }}
+    {{ form_row(form.originAddress.latitude) }}
+    {{ form_row(form.originAddress.longitude) }}
+
+    <hr>
+
+    {{ form_row(form.deliveryAddress.streetAddress) }}
+    {{ form_row(form.deliveryAddress.description) }}
+    {{ form_row(form.deliveryAddress.latitude) }}
+    {{ form_row(form.deliveryAddress.longitude) }}
+
+    {{ form_widget(form._token) }}
+
+    <hr>
+
+    <button type="submit" class="btn btn-block btn-lg btn-primary">Suivant</button>
+
+  {{ form_end(form, { render_rest: false }) }} #}
+
+  <div class="alert alert-success">Le prix de la livraison est de {{ price }}€</div>
+  <button type="submit" class="btn btn-block btn-lg btn-primary">Suivant</button>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function initMap() {
+  new CoopCycle.DatePicker(document.querySelector('#datepicker'), {
+    defaultValue: "{{ form.date.vars.value|date('Y-m-d H:i:s') }}",
+    onChange: function(date, dateString) {
+      document.querySelector('#delivery_date').value = date.format('YYYY-MM-DD HH:mm:ss')
+      console.log(date, dateString)
+    }
+  });
+  new CoopCycle.AddressInput(document.querySelector('#delivery_originAddress_streetAddress'), {
+    elements: {
+      latitude: document.querySelector('#delivery_originAddress_latitude'),
+      longitude: document.querySelector('#delivery_originAddress_longitude'),
+      postalCode: document.querySelector('#delivery_originAddress_postalCode'),
+      addressLocality: document.querySelector('#delivery_originAddress_addressLocality')
+    }
+  })
+  new CoopCycle.AddressInput(document.querySelector('#delivery_deliveryAddress_streetAddress'), {
+    elements: {
+      latitude: document.querySelector('#delivery_deliveryAddress_latitude'),
+      longitude: document.querySelector('#delivery_deliveryAddress_longitude'),
+      postalCode: document.querySelector('#delivery_deliveryAddress_postalCode'),
+      addressLocality: document.querySelector('#delivery_deliveryAddress_addressLocality')
+    }
+  })
+}
+</script>
+<script src="{{ asset('js/widgets/address-input.js') }}"></script>
+<script src="{{ asset('js/widgets/date-picker.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ craue_setting('google_api_key') }}&libraries=places&callback=initMap"
+  async defer></script>
+{% endblock %}
