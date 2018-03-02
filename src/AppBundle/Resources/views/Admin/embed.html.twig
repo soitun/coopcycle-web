@@ -1,0 +1,30 @@
+{% extends "AppBundle::admin.html.twig" %}
+
+{% form_theme embed_settings_form 'bootstrap_3_layout.html.twig' %}
+
+{% block content %}
+
+<h3>Formulaire de création de livraison</h3>
+
+{% if pricing_rule_set is null %}
+  <div class="alert alert-warning">Vous devez d'abord configurer un règle tarifaire à appliquer</div>
+{% endif %}
+
+{% if pricing_rule_set is not null %}
+  <p>Utilisez le code HTML ci-dessous pour intégrer le formulaire sur votre site</p>
+  {% set iframe_code %}<iframe src="{{ url('embed_delivery') }}" width="600" height="800" frameborder="0"></iframe>{% endset %}
+  <pre>{{ iframe_code|e }}</pre>
+{% endif %}
+
+{{ form_start(embed_settings_form) }}
+  {{ form_row(embed_settings_form.pricingRuleSet) }}
+  <hr>
+  <button type="submit" class="btn btn-block btn-primary">Suivant</button>
+{{ form_end(embed_settings_form) }}
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

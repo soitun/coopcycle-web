@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/{_locale}", requirements={ "_locale": "%locale_regex%" })
@@ -24,6 +25,21 @@ class EmbedController extends Controller
         ]);
     }
 
+    private function getPricingRuleSet()
+    {
+        $pricingRuleSet = null;
+        try {
+            $pricingRuleSetId = $this->get('craue_config')->get('embed.delivery.pricingRuleSet');
+            if ($pricingRuleSetId) {
+                $pricingRuleSet = $this->getDoctrine()
+                    ->getRepository(PricingRuleSet::class)
+                    ->find($pricingRuleSetId);
+            }
+        } catch (\RuntimeException $e) {}
+
+        return $pricingRuleSet;
+    }
+
     /**
      * @Route("/embed/delivery", name="embed_delivery")
      * @Template
@@ -32,6 +48,11 @@ class EmbedController extends Controller
     {
         if ($this->container->has('profiler')) {
             $this->container->get('profiler')->disable();
+        }
+
+        $pricingRuleSet = $this->getPricingRuleSet();
+        if (!$pricingRuleSet) {
+            throw new NotFoundHttpException('Pricing rule set not configured');
         }
 
         $delivery = new Delivery();
@@ -54,9 +75,10 @@ class EmbedController extends Controller
             $this->container->get('profiler')->disable();
         }
 
-        $pricingRuleSet = $this->getDoctrine()
-            ->getRepository(PricingRuleSet::class)
-            ->findOneByName('Test');
+        $pricingRuleSet = $this->getPricingRuleSet();
+        if (!$pricingRuleSet) {
+            throw new NotFoundHttpException('Pricing rule set not configured');
+        }
 
         $deliveryManager = $this->get('coopcycle.delivery.manager');
 
