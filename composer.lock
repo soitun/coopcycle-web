@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81e114d0f20d99fa667a29b84b0bd092",
+    "content-hash": "49f4f00492025a7cb82ae84cf581ec31",
     "packages": [
         {
             "name": "api-platform/core",
@@ -2834,16 +2834,16 @@
         },
         {
             "name": "edamov/pushok",
-            "version": "0.13.0",
+            "version": "0.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/edamov/pushok.git",
-                "reference": "743397b7590867f4d6396af6562edb3ca664f9b9"
+                "reference": "2f97d27517ebd02f68390bf84984131f0b997250"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/edamov/pushok/zipball/743397b7590867f4d6396af6562edb3ca664f9b9",
-                "reference": "743397b7590867f4d6396af6562edb3ca664f9b9",
+                "url": "https://api.github.com/repos/edamov/pushok/zipball/2f97d27517ebd02f68390bf84984131f0b997250",
+                "reference": "2f97d27517ebd02f68390bf84984131f0b997250",
                 "shasum": ""
             },
             "require": {
@@ -2897,9 +2897,9 @@
             ],
             "support": {
                 "issues": "https://github.com/edamov/pushok/issues",
-                "source": "https://github.com/edamov/pushok/tree/0.13.0"
+                "source": "https://github.com/edamov/pushok/tree/0.14.0"
             },
-            "time": "2021-03-22T09:47:30+00:00"
+            "time": "2022-04-28T13:18:46+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -22138,5 +22138,5 @@
         "php": ">=8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
