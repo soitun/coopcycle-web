@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0d407aeaf18c42e11be8c12e5ad8d6f",
+    "content-hash": "6e1e6dfe49100657acf444a738ed3aaa",
     "packages": [
         {
             "name": "acseo/typesense-bundle",
@@ -21429,16 +21429,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.11",
+            "version": "1.9.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "46e223dd68a620da18855c23046ddb00940b4014"
+                "reference": "f2d5cf71be91172a57c649770b73c20ebcffb0bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/46e223dd68a620da18855c23046ddb00940b4014",
-                "reference": "46e223dd68a620da18855c23046ddb00940b4014",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f2d5cf71be91172a57c649770b73c20ebcffb0bf",
+                "reference": "f2d5cf71be91172a57c649770b73c20ebcffb0bf",
                 "shasum": ""
             },
             "require": {
@@ -21468,7 +21468,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.11"
+                "source": "https://github.com/phpstan/phpstan/tree/1.9.18"
             },
             "funding": [
                 {
@@ -21484,7 +21484,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-24T15:45:13+00:00"
+            "time": "2023-02-17T15:01:27+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -22098,31 +22098,26 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.23",
+            "version": "0.15.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "690b31768b322db886b35845f8452025eba2cacb"
+                "reference": "7f6ee7974175138864d3b50c28ea73a7b0fd4e2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/690b31768b322db886b35845f8452025eba2cacb",
-                "reference": "690b31768b322db886b35845f8452025eba2cacb",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/7f6ee7974175138864d3b50c28ea73a7b0fd4e2d",
+                "reference": "7f6ee7974175138864d3b50c28ea73a7b0fd4e2d",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.6"
+                "phpstan/phpstan": "^1.9.14"
             },
             "conflict": {
-                "phpstan/phpdoc-parser": "<1.2",
-                "rector/rector-cakephp": "*",
                 "rector/rector-doctrine": "*",
-                "rector/rector-laravel": "*",
-                "rector/rector-nette": "*",
-                "rector/rector-phpoffice": "*",
+                "rector/rector-downgrade-php": "*",
                 "rector/rector-phpunit": "*",
-                "rector/rector-prefixed": "*",
                 "rector/rector-symfony": "*"
             },
             "bin": [
@@ -22131,7 +22126,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.12-dev"
+                    "dev-main": "0.15-dev"
                 }
             },
             "autoload": {
@@ -22146,7 +22141,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.23"
+                "source": "https://github.com/rectorphp/rector/tree/0.15.17"
             },
             "funding": [
                 {
@@ -22154,7 +22149,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-01T15:50:16+00:00"
+            "time": "2023-02-17T20:34:07+00:00"
         },
         {
             "name": "sebastian/cli-parser",
