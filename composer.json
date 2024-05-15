@@ -72,7 +72,7 @@
         "geocoder-php/nominatim-provider": "^5.0",
         "jmikola/geojson": "~1.0",
         "simple-bus/symfony-bridge": "^6.0",
-        "friendsofsymfony/jsrouting-bundle": "^2.2",
+        "friendsofsymfony/jsrouting-bundle": "^3.5",
         "symfony/webpack-encore-bundle": "^1.6",
         "sylius/channel-bundle": "^1.7.5",
         "liip/imagine-bundle": "^2.3",
