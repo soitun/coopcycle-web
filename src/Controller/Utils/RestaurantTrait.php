@@ -19,6 +19,7 @@ use AppBundle\Entity\Sylius\Order;
 use AppBundle\Entity\Sylius\OrderRepository;
 use AppBundle\Entity\Sylius\Product;
 use AppBundle\Entity\Sylius\ProductImage;
+use AppBundle\Entity\Sylius\ProductOption;
 use AppBundle\Entity\Sylius\ProductTaxon;
 use AppBundle\Entity\Sylius\ProductVariant;
 use AppBundle\Entity\Sylius\ProductVariantTranslation;
@@ -836,7 +837,7 @@ trait RestaurantTrait
     }
 
     #[HideSoftDeleted]
-    public function restaurantProductOptionsAction($id, Request $request)
+    public function restaurantProductOptionsAction($id, Request $request, PaginatorInterface $paginator)
     {
         $restaurant = $this->entityManager
             ->getRepository(LocalBusiness::class)
@@ -844,11 +845,23 @@ trait RestaurantTrait
 
         $this->accessControl($restaurant);
 
+        $qb = $this->entityManager
+            ->getRepository(ProductOption::class)
+            ->createQueryBuilder('opt')
+            ->andWhere('opt.restaurant = :restaurant')
+            ->setParameter('restaurant', $restaurant);
+
         $routes = $request->attributes->get('routes');
+
+        $options = $paginator->paginate(
+            $qb,
+            $request->query->getInt('page', 1),
+            10
+        );
 
         return $this->render($request->attributes->get('template'), $this->withRoutes([
             'layout' => $request->attributes->get('layout'),
-            'options' => $restaurant->getProductOptions(),
+            'options' => $options,
             'restaurant' => $restaurant,
         ], $routes));
     }
