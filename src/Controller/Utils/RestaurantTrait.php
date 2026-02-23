@@ -593,7 +593,7 @@ trait RestaurantTrait
                     ];
                 }
 
-                uasort($opts, function ($a, $b) {
+                usort($opts, function ($a, $b) {
                     if ($a['position'] === $b['position']) return 0;
                     if ($a['position'] === -1) return 1;
                     if ($b['position'] === -1) return -1;
