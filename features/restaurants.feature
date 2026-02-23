@@ -1628,6 +1628,7 @@ Feature: Manage restaurants
         "@id":"/api/shop_collections/1",
         "@type":"ShopCollection",
         "title":"Our selection",
+        "slug": "our-selection",
         "shops": [
           "/api/restaurants/1",
           "/api/restaurants/2"
@@ -1655,6 +1656,7 @@ Feature: Manage restaurants
         "@id":"/api/shop_collections/1",
         "@type":"ShopCollection",
         "title":"Our selection",
+        "slug": "our-selection",
         "shops": [
           "/api/restaurants/1",
           "/api/restaurants/2",
@@ -1679,6 +1681,7 @@ Feature: Manage restaurants
         "@id":"/api/shop_collections/1",
         "@type":"ShopCollection",
         "title":"Our best restaurants",
+        "slug": "our-selection",
         "shops": [
           "/api/restaurants/1",
           "/api/restaurants/2",
