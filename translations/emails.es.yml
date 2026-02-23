@@ -51,7 +51,7 @@ admin.pledge.body: "Hola,\n<br>\n%username% le gustaría %pledge.name% estar en 
 user.pledge.subject: ¡Su sugerencia ahora está en CoopCycle!
 user.pledge.body: "Hola,\n<br>\n¡Gracias a ti, %pledge.name% ahora está en CoopCycle!\n"
 admin.send_invitation.create_password: Crear mi contraseña
-admin.send_invitation.body: "Hola %username%,\n<br>\nEste correo es una invitación\
+admin.send_invitation.body: "Hola,\n<br>\nEste correo es una invitación\
   \ a tu espacio CoopCycle, para terminar la creación de su cuenta, por favor haga\
   \ un clic en el siguiente enlace.\n"
 admin.send_invitation.subject: ¡Invitación a CoopCycle!

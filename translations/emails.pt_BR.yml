@@ -39,7 +39,7 @@ admin.order_foodtech.created.body: |
 admin.pledge.subject: Uma nova sugestão foi enviada!
 admin.send_invitation.subject: Convite para CoopCycle!
 admin.send_invitation.body: |
-  Olá %username%,
+  Olá,
   <br>
   Este é um convite para o espaço CoopCycle, para finalizar a criação da sua conta, clique no link seguinte.
 admin.send_invitation.create_password: Criar minha senha

@@ -231,7 +231,6 @@ class EmailManager
     {
         $subject = $this->translator->trans('admin.send_invitation.subject', [], 'emails');
         $body = $this->mjml->render($this->templating->render('emails/admin_send_invitation.mjml.twig', [
-            'user' => $invitation->getUser(),
             'invitation' => $invitation,
         ]));
 

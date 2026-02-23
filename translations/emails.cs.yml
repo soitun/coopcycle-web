@@ -50,7 +50,7 @@ user.pledge.subject: Váš návrh je nyní na CoopCycle!
 admin.pledge.body: "Dobrý den,\n<br>\n%username% si přeje, aby %pledge.name% byl na\
   \ CoopCycle!\n"
 admin.send_invitation.create_password: Vytvořit mé heslo
-admin.send_invitation.body: "Dobrý den, %username%,\n<br>\nToto je pozvání do aplikace\
+admin.send_invitation.body: "Dobrý den,\n<br>\nToto je pozvání do aplikace\
   \ CoopCycle. Chcete-li dokončit vytvoření svého účtu, klikněte na následující odkaz.\n"
 admin.send_invitation.subject: Pozvání do CoopCycle!
 admin.pledge.subject: Byl odeslán nový návrh!

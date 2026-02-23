@@ -47,7 +47,7 @@ order.payment.body: "Hola,\n<br>\nHem completat un lliurament que ens ha demanat
   <br>\nA continuació trobarà un enllaç que li permet pagar amb targeta de crèdit.\n"
 order.payment.subject: Pagament de la teva comanda %order.number%
 admin.send_invitation.create_password: Crear la meva contrasenya
-admin.send_invitation.body: "Hola %username%,\n<br>\nAquest correu és una invitació\
+admin.send_invitation.body: "Hola,\n<br>\nAquest correu és una invitació\
   \ al teu espai CoopCycle, per a acabar la creació del seu compte, si us plau faci\
   \ un clic en el següent enllaç.\n"
 admin.send_invitation.subject: Invitació a CoopCycle!

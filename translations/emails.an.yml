@@ -39,7 +39,7 @@ admin.order_foodtech.created.body: |
 admin.pledge.subject: 'S''ha ninviau una nueva sucherencia!'
 admin.send_invitation.subject: 'Invitación a CoopCycle!'
 admin.send_invitation.body: |
-  Ola %username%,
+  Ola,
   <br>
   Este correu ye una invitación a l'espacio CoopCycle, pa rematar la creyación d'a suya cuenta, per favor faiga un clic en o siguient vinclo.
 admin.send_invitation.create_password: 'Creyar la mía clau'

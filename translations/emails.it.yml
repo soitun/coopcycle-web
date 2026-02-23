@@ -31,7 +31,7 @@ admin.order_foodtech.created.body: "Ciao,\n<br>\nÈ stato creato un nuovo ordine
   \ <strong>%restaurant.name%</strong>.\n"
 admin.pledge.subject: È stato mandato un nuovo suggerimento!
 admin.send_invitation.subject: Invito su CoopCycle!
-admin.send_invitation.body: "Ciao %username%,\n<br>\nQuesto è un invito per la piattaforma\
+admin.send_invitation.body: "Ciao,\n<br>\nQuesto è un invito per la piattaforma\
   \ CoopCycle, per completare la creazione del tuo account clicca sul link seguente.\n"
 admin.send_invitation.create_password: Crea la mia password
 admin.pledge.body: "Ciao,\n<br>\n%username% vorrebbe che %pledge.name% fosse su CoopCycle!\n"

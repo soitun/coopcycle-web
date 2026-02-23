@@ -37,7 +37,7 @@ admin.order_foodtech.created.body: |
 admin.pledge.subject: 'Egy új javaslat került beküldésre!'
 admin.send_invitation.subject: 'Meghívás a CoopCycle-be!'
 admin.send_invitation.body: |
-  Szia %username%,
+  Szia,
   <br>
   Ez egy meghívó a CoopCycle univerzumba, a profilod létrehozásának befejezeséhez kattints a következő linkre.
 admin.send_invitation.create_password: 'Jelszó létrehozása'

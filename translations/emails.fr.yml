@@ -49,7 +49,7 @@ admin.order_foodtech.created.body: |
   Une nouvelle commande a été créée pour <strong>%restaurant.name%</strong>.
 admin.send_invitation.subject: Invitation à CoopCycle !
 admin.send_invitation.body: |
-  Bonjour %username%,
+  Bonjour,
   <br>
   Ceci est une invitation à l'espace CoopCycle, pour finaliser la création de votre compte veuillez cliquer sur lien suivant.
 admin.send_invitation.create_password: Créer mon mot de passe
