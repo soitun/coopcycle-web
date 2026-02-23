@@ -146,8 +146,10 @@ const SlideContent = ({ slide, index, uploadEndpoint, onChange }) => {
     }}>
       <div className={ `swiper-slide-content` }>
         <div className="swiper-slide-content-left" style={{ position: 'relative' }}>
-          <h4 ref={titleRef} onBlur={() => sanitize(title, titleEdit)}>{title}</h4>
-          <p ref={textRef} onBlur={() => sanitize(text, textEdit)}>{text}</p>
+          <h4 ref={titleRef} onBlur={() => sanitize(title, titleEdit)}
+             className={ `coopcycle-homepage-bg-${slide.colorScheme}` }>{title}</h4>
+          <p ref={textRef} onBlur={() => sanitize(text, textEdit)}
+             className={ `coopcycle-homepage-bg-${slide.colorScheme}` }>{text}</p>
           <button type="button" className="btn btn-xs">
             <span ref={buttonTextRef} onBlur={() => sanitize(buttonText, buttonTextEdit)}>{buttonText}</span>
             <ArrowRight size={12} className="ml-2" />
