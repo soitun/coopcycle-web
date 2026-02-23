@@ -587,9 +587,9 @@ trait RestaurantTrait
                 $opts = [];
                 foreach ($restaurant->getProductOptions() as $opt) {
                     $opts[] = [
-                        'product'  => $product,
                         'option'   => $opt,
-                        'position' => $product->getPositionForOption($opt)
+                        'position' => $product->getPositionForOption($opt),
+                        'enabled'  => $product->isOptionEnabled($opt),
                     ];
                 }
 
