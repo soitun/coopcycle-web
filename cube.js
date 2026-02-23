@@ -20,9 +20,9 @@ module.exports = {
         type: 'clickhouse',
         host: 'clickhouse',
         port: '8123',
-        database: 'coopcycle',
-        username: 'coopcycle',
-        password: 'coopcycle',
+        database: process.env.CLICKHOUSE_DB,
+        username: process.env.CLICKHOUSE_USER,
+        password: process.env.CLICKHOUSE_PASSWORD,
         ssl: false,
       }
     }

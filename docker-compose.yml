@@ -253,6 +253,9 @@ services:
       - CUBEJS_API_SECRET
       - CUBEJS_SCHEMA_PATH=schema
       - CUBEJS_CACHE_AND_QUEUE_DRIVER=memory
+      - CLICKHOUSE_DB=${CLICKHOUSE_DB:-coopcycle}
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER:-coopcycle}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-coopcycle}
     volumes:
       - ./cube:/cube/conf/schema
       - ./cube.js:/cube/conf/cube.js
