@@ -13,6 +13,7 @@ fos_js_routing:
         - restaurant_cart_address
         - restaurant_cart_clear_time
         - restaurant_modify_cart_item_quantity
+        - admin_customize_shop_collections
         - admin_deliveries
         - admin_delivery
         - admin_deliveries_pricing_ruleset

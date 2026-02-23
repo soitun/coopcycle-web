@@ -6,6 +6,7 @@ import { Navigation } from 'swiper/modules'
 import _ from 'lodash'
 import qs from 'qs'
 import { Cascader, Skeleton, Card, Space } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 // TODO
 // Do not duplicate code
@@ -45,19 +46,22 @@ const swiperOpts = {
 
 const ComponentCascader = ({ placeholder, cuisines, customCollections, onChange, defaultValue }) => {
 
+  const { t } = useTranslation();
+
   const options = useMemo(() => {
 
     const otherOptions = []
-    if (customCollections.length > 0) {
-      otherOptions.push({
-        label: 'Custom',
-        value: 'custom',
-        children: customCollections.map((c) => ({
-          label: c.title,
-          value: qs.stringify({ slug: c.slug }),
-        }))
-      })
-    }
+    otherOptions.push({
+      label: 'Custom',
+      value: 'custom',
+      children: customCollections.map((c) => ({
+        label: c.title,
+        value: qs.stringify({ slug: c.slug }),
+      })).concat([{
+        label: t('ADD_BUTTON'),
+        value: ''
+      }])
+    })
 
     return [
       {
@@ -206,13 +210,19 @@ export default class ShopCollection {
         customCollections={this.config.customCollections}
         placeholder={this.api.i18n.t('select_value')}
         onChange={(value) => {
-          const [ component, args ] = value
-          this.showPreview(wrapper, component, args)
 
-          this._data = {
-            component,
-            args: args ? qs.parse(args) : {}
+          const [ component, args ] = value
+
+          if (component === 'custom' && args === '') {
+            window.open(window.Routing.generate('admin_customize_shop_collections'), '_blank').focus();
+          } else {
+            this.showPreview(wrapper, component, args)
+            this._data = {
+              component,
+              args: args ? qs.parse(args) : {}
+            }
           }
+
         }} />
     )
 
