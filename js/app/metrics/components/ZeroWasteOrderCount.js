@@ -1,8 +1,9 @@
 import React from 'react';
 import { QueryRenderer } from '@cubejs-client/react';
 import { Spin } from 'antd';
-import 'chart.js/auto'; // ideally we should only import the component that we need: https://react-chartjs-2.js.org/docs/migration-to-v4/#tree-shaking
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2';
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 import moment from 'moment'
 
 const commonOptions = {

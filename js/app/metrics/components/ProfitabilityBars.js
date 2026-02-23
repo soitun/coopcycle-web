@@ -1,7 +1,9 @@
 import React from 'react';
 import { QueryRenderer } from '@cubejs-client/react';
 import { Spin } from 'antd';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2';
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
 

@@ -3,8 +3,9 @@ import cubejs from '@cubejs-client/core';
 import { QueryRenderer } from '@cubejs-client/react';
 import { Spin, Popover, Button } from 'antd';
 import React, { useImperativeHandle, createRef, forwardRef, useState } from 'react';
-import 'chart.js/auto'; // ideally we should only import the component that we need: https://react-chartjs-2.js.org/docs/migration-to-v4/#tree-shaking
+import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend } from 'chart.js'
 import { Line } from 'react-chartjs-2';
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend)
 import moment from 'moment'
 import { ThreeDots } from 'react-loader-spinner'
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
