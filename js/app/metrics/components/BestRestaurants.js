@@ -62,6 +62,18 @@ const Chart = ({ cubejsApi, dateRange }) => {
         "measures": [
           "OrderExport.count"
         ],
+        "filters": [
+          {
+            // FIXME
+            // Naming things is hard...
+            // This is all we have to distinguish foodtech/last-mile orders
+            "member": "OrderExport.applied_billing",
+            "operator": "equals",
+            "values": [
+              "FOODTECH"
+            ]
+          }
+        ],
         "timeDimensions": [
           {
             "dimension": "OrderExport.completed_at",
