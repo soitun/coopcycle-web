@@ -258,7 +258,7 @@ services:
     attach: false
 
   clickhouse:
-    image: clickhouse/clickhouse-server:latest
+    image: clickhouse/clickhouse-server:25.8
     hostname: clickhouse
     ports:
       - "8123:8123"
@@ -277,7 +277,6 @@ services:
       - clickhouse_data:/var/lib/clickhouse
       - clickhouse_logs:/var/log/clickhouse-server
       - ./clickhouse/config.d:/etc/clickhouse-server/config.d:ro
-      - ./clickhouse/users.d:/etc/clickhouse-server/users.d
       - ./clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
     ulimits:
       nofile:
