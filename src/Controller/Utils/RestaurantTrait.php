@@ -686,13 +686,13 @@ trait RestaurantTrait
             return $this->redirectToRoute($routes['products'], ['id' => $destId]);
         }
 
-        return $this->render($request->attributes->get('template'), $this->withRoutes([
+        return $this->render($request->attributes->get('template'), $this->auth($this->withRoutes([
             'layout' => $request->attributes->get('layout'),
             'products' => $products,
             'restaurant' => $restaurant,
             'restaurant_iri' => $iriConverter->getIriFromResource($restaurant),
             'copy_form' => $copyForm->createView(),
-        ], $routes));
+        ], $routes)));
     }
 
     public function restaurantProductAction($restaurantId, $productId, Request $request,

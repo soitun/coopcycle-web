@@ -203,16 +203,6 @@ class ProductType extends AbstractType
             $form = $event->getForm();
             $data = $event->getData();
 
-            // This is a delete button (used in list of products)
-            if (count($data) === 1 && isset($data['delete'])) {
-                foreach (array_keys($form->all()) as $key) {
-                    if ($key !== 'delete') {
-                        $form->remove($key);
-                    }
-                }
-                return;
-            }
-
             $product = $form->getData();
             $name = $data['name'];
 
@@ -265,12 +255,6 @@ class ProductType extends AbstractType
                     $product->addOptionAt($opt['option'], $opt['position']);
                     $product->setOptionEnabled($opt['option'], $opt['enabled']);
                 }
-            }
-
-            // This is a delete button (used in list of products)
-            if (count($form) === 1 && $form->has('delete')) {
-
-                return;
             }
 
             $priceFormName = $this->taxIncl ? 'taxIncluded' : 'taxExcluded';
