@@ -1,0 +1,7 @@
+<clickhouse>
+    <profiles>
+        <default>
+            <input_format_parquet_use_native_reader_v3>0</input_format_parquet_use_native_reader_v3>
+        </default>
+    </profiles>
+</clickhouse>

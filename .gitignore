@@ -1,4 +1,5 @@
 /app/config/parameters.yml
+/clickhouse/users.d/default-user.xml
 /build/
 /phpunit.xml
 
