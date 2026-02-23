@@ -24,7 +24,7 @@ module.exports = {
         host: 'clickhouse',
         port: 8123,
         database: 'coopcycle',
-        username: 'coopcycle',
+        user: 'coopcycle',
         password: 'coopcycle',
       })
     }

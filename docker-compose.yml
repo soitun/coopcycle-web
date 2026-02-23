@@ -240,6 +240,7 @@ services:
     depends_on:
       - postgres
       - minio
+      - clickhouse
     environment:
       - CUBEJS_DB_TYPE=postgres
       - CUBEJS_DB_HOST=${COOPCYCLE_DB_HOST}
