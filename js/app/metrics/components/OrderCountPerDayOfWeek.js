@@ -1,5 +1,5 @@
 import React from 'react'
-import { QueryRenderer } from '@cubejs-client/react';
+import { useCubeQuery } from '@cubejs-client/react';
 import { Spin } from 'antd';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2';
@@ -14,12 +14,43 @@ const commonOptions = {
 
 import { getCubeDateRange } from '../utils'
 
-const renderChart = ({ resultSet, error }) => {
+const Chart = ({ dateRange }) => {
+
+  const { resultSet, isLoading, error } = useCubeQuery({
+    "measures": [
+      "Order.count"
+    ],
+    "timeDimensions": [
+      {
+        "dimension": "Order.shippingTimeRange",
+        "dateRange": getCubeDateRange(dateRange)
+      }
+    ],
+    "order": [
+      [
+        "Order.dayOfWeek",
+        "asc"
+      ]
+    ],
+    "dimensions": [
+      "Order.dayOfWeek"
+    ],
+    "filters": [
+      {
+        "member": "Order.state",
+        "operator": "equals",
+        "values": [
+          "fulfilled"
+        ]
+      }
+    ]
+  });
+
   if (error) {
     return <div>{error.toString()}</div>;
   }
 
-  if (!resultSet) {
+  if (isLoading || !resultSet) {
     return <Spin />;
   }
 
@@ -65,60 +96,6 @@ const renderChart = ({ resultSet, error }) => {
     },
   };
   return <Bar data={data} options={options} />;
-
-};
-
-const Chart = ({ cubeApi, dateRange }) => {
-
-  return (
-    <QueryRenderer
-      query={{
-        "measures": [
-          "Order.count"
-        ],
-        "timeDimensions": [
-          {
-            "dimension": "Order.shippingTimeRange",
-            "dateRange": getCubeDateRange(dateRange)
-          }
-        ],
-        "order": [
-          [
-            "Order.dayOfWeek",
-            "asc"
-          ]
-        ],
-        "dimensions": [
-          "Order.dayOfWeek"
-        ],
-        "filters": [
-          {
-            "member": "Order.state",
-            "operator": "equals",
-            "values": [
-              "fulfilled"
-            ]
-          }
-        ]
-      }}
-      cubeApi={cubeApi}
-      resetResultSetOnChange={false}
-      render={(props) => renderChart({
-        ...props,
-        chartType: 'bar',
-        pivotConfig: {
-          "x": [
-            "Order.dayOfWeek"
-          ],
-          "y": [
-            "measures"
-          ],
-          "fillMissingDates": true,
-          "joinDateRange": false
-        }
-      })}
-    />
-  );
 };
 
 export default Chart

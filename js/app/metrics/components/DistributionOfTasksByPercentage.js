@@ -1,4 +1,4 @@
-import { QueryRenderer } from '@cubejs-client/react';
+import { useCubeQuery } from '@cubejs-client/react';
 import { Spin } from 'antd';
 import React from 'react';
 import { Chart as ChartJS, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
@@ -169,73 +169,60 @@ const BarChartRenderer = ({ resultSet, pivotConfig, taskType }) => {
   return <Bar type="bar" data={data} options={options} />;
 };
 
-const renderChart = ({ resultSet, error, pivotConfig, taskType }) => {
+const pivotConfig = {
+  "x": [
+    "Task.intervalDiff"
+  ],
+  "y": [
+    "measures"
+  ],
+  "fillMissingDates": true,
+  "joinDateRange": false
+};
+
+const ChartRenderer = ({ dateRange, taskType }) => {
+  const { resultSet, isLoading, error } = useCubeQuery({
+    "dimensions": [
+      "Task.intervalDiff"
+    ],
+    "timeDimensions": [
+      {
+        "dimension": "Task.intervalEndAt",
+        "dateRange": getCubeDateRange(dateRange)
+      }
+    ],
+    "order": [
+      [
+        "Task.intervalDiff",
+        "asc"
+      ]
+    ],
+    "measures": [
+      "Task.countDone"
+    ],
+    "segments": [
+      `Task.${taskType.toLowerCase()}`
+    ],
+    "filters": [
+      {
+        "member": "Task.status",
+        "operator": "contains",
+        "values": [
+          "DONE"
+        ]
+      }
+    ]
+  });
+
   if (error) {
     return <div>{error.toString()}</div>;
   }
 
-  if (!resultSet) {
+  if (isLoading || !resultSet) {
     return <Spin />;
   }
 
   return <BarChartRenderer resultSet={resultSet} pivotConfig={pivotConfig} taskType={taskType} />;
-
-};
-
-const ChartRenderer = ({ cubeApi, dateRange, taskType }) => {
-  return (
-    <QueryRenderer
-      query={{
-        "dimensions": [
-          "Task.intervalDiff"
-        ],
-        "timeDimensions": [
-          {
-            "dimension": "Task.intervalEndAt",
-            "dateRange": getCubeDateRange(dateRange)
-          }
-        ],
-        "order": [
-          [
-            "Task.intervalDiff",
-            "asc"
-          ]
-        ],
-        "measures": [
-          "Task.countDone"
-        ],
-        "segments": [
-          `Task.${taskType.toLowerCase()}`
-        ],
-        "filters": [
-          {
-            "member": "Task.status",
-            "operator": "contains",
-            "values": [
-              "DONE"
-            ]
-          }
-        ]
-      }}
-      cubeApi={cubeApi}
-      resetResultSetOnChange={false}
-      render={(props) => renderChart({
-        ...props,
-        chartType: 'bar',
-        pivotConfig: {
-          "x": [
-            "Task.intervalDiff"
-          ],
-          "y": [
-            "measures"
-          ],
-          "fillMissingDates": true,
-          "joinDateRange": false
-        },
-        taskType
-      })}
-    />
-  );
 };
 
 export default ChartRenderer

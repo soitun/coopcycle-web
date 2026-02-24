@@ -30,17 +30,17 @@ const gridWithFilterStyle = {
   paddingTop: 8,
 }
 
-const Dashboard = ({ cubeApi, dateRange, allTags, tasksMetricsEnabled }) => {
+const Dashboard = ({ dateRange, allTags, tasksMetricsEnabled }) => {
   const [ selectedTags, setSelectedTags ] = useState([])
 
   return (
     <div>
       <div className="metrics-grid">
         <ChartPanel title="Number of stores">
-          <StoreCumulativeCount cubeApi={ cubeApi } dateRange={ dateRange } />
+          <StoreCumulativeCount dateRange={ dateRange } />
         </ChartPanel>
         <ChartPanel title="Average distance">
-          <AverageDistance cubeApi={ cubeApi } dateRange={ dateRange } />
+          <AverageDistance dateRange={ dateRange } />
         </ChartPanel>
       </div>
       <div style={selectedTags.length > 0 ? hasFilterContainerStyle : baseContainerStyle}>
@@ -49,20 +49,18 @@ const Dashboard = ({ cubeApi, dateRange, allTags, tasksMetricsEnabled }) => {
                     onChange={ tags => setSelectedTags(tags) } />
         <div className="metrics-grid" style={gridWithFilterStyle}>
           <ChartPanel title="Number of tasks">
-            <NumberOfTasks cubeApi={ cubeApi } dateRange={ dateRange } tags={ selectedTags } />
+            <NumberOfTasks dateRange={ dateRange } tags={ selectedTags } />
           </ChartPanel>
           {tasksMetricsEnabled && (
             <>
               <ChartPanel title="Tasks done on time, too early or too late" featurePreview={true}>
                 <TasksDoneTiming
-                  cubeApi={ cubeApi }
                   dateRange={ dateRange }
                   tags={ selectedTags } />
               </ChartPanel>
               <div/>
               <ChartPanel title="Average number of minutes Tasks are done too early/late" featurePreview={true}>
                 <AverageTiming
-                  cubeApi={ cubeApi }
                   dateRange={ dateRange }
                   tags={ selectedTags } />
               </ChartPanel>
@@ -74,7 +72,6 @@ const Dashboard = ({ cubeApi, dateRange, allTags, tasksMetricsEnabled }) => {
         {tasksMetricsEnabled && (
           <ChartPanel title="Number Of PICKUPs done X minutes earlier/later than planned" featurePreview={true}>
             <DistributionOfTasksByTiming
-              cubeApi={ cubeApi }
               dateRange={ dateRange }
               taskType="PICKUP"/>
           </ChartPanel>
@@ -82,7 +79,6 @@ const Dashboard = ({ cubeApi, dateRange, allTags, tasksMetricsEnabled }) => {
         {tasksMetricsEnabled && (
           <ChartPanel title="Number Of DROPOFFs done X minutes earlier/later than planned" featurePreview={true}>
             <DistributionOfTasksByTiming
-              cubeApi={ cubeApi }
               dateRange={ dateRange }
               taskType="DROPOFF"/>
           </ChartPanel>
@@ -90,7 +86,6 @@ const Dashboard = ({ cubeApi, dateRange, allTags, tasksMetricsEnabled }) => {
         {tasksMetricsEnabled && (
           <ChartPanel title="Number Of PICKUPs done % earlier/later than planned" featurePreview={true}>
             <DistributionOfTasksByPercentage
-              cubeApi={ cubeApi }
               dateRange={ dateRange }
               taskType="PICKUP"/>
           </ChartPanel>
@@ -98,7 +93,6 @@ const Dashboard = ({ cubeApi, dateRange, allTags, tasksMetricsEnabled }) => {
         {tasksMetricsEnabled && (
           <ChartPanel title="Number Of DROPOFFs done % earlier/later than planned" featurePreview={true}>
             <DistributionOfTasksByPercentage
-              cubeApi={ cubeApi }
               dateRange={ dateRange }
               taskType="DROPOFF"/>
           </ChartPanel>

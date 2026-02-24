@@ -1,5 +1,5 @@
 import React from 'react'
-import { QueryRenderer } from '@cubejs-client/react';
+import { useCubeQuery } from '@cubejs-client/react';
 import { Spin } from 'antd';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2';
@@ -13,12 +13,30 @@ const commonOptions = {
 
 import { getCubeDateRange } from '../utils'
 
-const renderChart = ({ resultSet, error }) => {
+const Chart = ({ dateRange }) => {
+
+  const { resultSet, isLoading, error } = useCubeQuery({
+    "measures": [
+      "TaskList.averageDistance"
+    ],
+    "timeDimensions": [
+      {
+        "dimension": "TaskList.date",
+        "granularity": "day",
+        "dateRange": getCubeDateRange(dateRange)
+      }
+    ],
+    "order": {
+      "TaskList.date": "asc"
+    },
+    "filters": []
+  });
+
   if (error) {
     return <div>{error.toString()}</div>;
   }
 
-  if (!resultSet) {
+  if (isLoading || !resultSet) {
     return <Spin />;
   }
 
@@ -45,47 +63,6 @@ const renderChart = ({ resultSet, error }) => {
     },
   };
   return <Bar data={data} options={options} />;
-
-};
-
-const Chart = ({ cubeApi, dateRange }) => {
-
-  return (
-    <QueryRenderer
-      query={{
-        "measures": [
-          "TaskList.averageDistance"
-        ],
-        "timeDimensions": [
-          {
-            "dimension": "TaskList.date",
-            "granularity": "day",
-            "dateRange": getCubeDateRange(dateRange)
-          }
-        ],
-        "order": {
-          "TaskList.date": "asc"
-        },
-        "filters": []
-      }}
-      cubeApi={cubeApi}
-      resetResultSetOnChange={false}
-      render={(props) => renderChart({
-        ...props,
-        chartType: 'bar',
-        pivotConfig: {
-          "x": [
-            "TaskList.date.day"
-          ],
-          "y": [
-            "measures"
-          ],
-          "fillMissingDates": true,
-          "joinDateRange": false
-        }
-      })}
-    />
-  );
 };
 
 export default Chart

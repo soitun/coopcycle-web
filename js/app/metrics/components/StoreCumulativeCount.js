@@ -1,5 +1,5 @@
 import React from 'react'
-import { QueryRenderer } from '@cubejs-client/react';
+import { useCubeQuery } from '@cubejs-client/react';
 import { Spin } from 'antd';
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend } from 'chart.js'
 import { Line } from 'react-chartjs-2';
@@ -13,12 +13,31 @@ const commonOptions = {
 
 import { getCubeDateRange } from '../utils'
 
-const renderChart = ({ resultSet, error }) => {
+const Chart = ({ dateRange }) => {
+
+  const { resultSet, isLoading, error } = useCubeQuery({
+    "measures": [
+      "Store.cumulativeCount"
+    ],
+    "timeDimensions": [
+      {
+        "dimension": "Store.createdAt",
+        "granularity": "month",
+        "dateRange": getCubeDateRange(dateRange)
+      }
+    ],
+    "order": {
+      "Store.createdAt": "asc"
+    },
+    "filters": [],
+    "dimensions": []
+  });
+
   if (error) {
     return <div>{error.toString()}</div>;
   }
 
-  if (!resultSet) {
+  if (isLoading || !resultSet) {
     return <Spin />;
   }
 
@@ -44,51 +63,8 @@ const renderChart = ({ resultSet, error }) => {
       },
     },
   };
-  // return <Bar data={data} options={options} />;
 
   return <Line data={data} options={options} />;
-
-};
-
-const Chart = ({ cubeApi, dateRange }) => {
-
-  return (
-    <QueryRenderer
-      query={{
-        "measures": [
-          "Store.cumulativeCount"
-        ],
-        "timeDimensions": [
-          {
-            "dimension": "Store.createdAt",
-            "granularity": "month",
-            "dateRange": getCubeDateRange(dateRange)
-          }
-        ],
-        "order": {
-          "Store.createdAt": "asc"
-        },
-        "filters": [],
-        "dimensions": []
-      }}
-      cubeApi={cubeApi}
-      resetResultSetOnChange={false}
-      render={(props) => renderChart({
-        ...props,
-        chartType: 'bar',
-        pivotConfig: {
-          "x": [
-            "Store.createdAt.month"
-          ],
-          "y": [
-            "measures"
-          ],
-          "fillMissingDates": true,
-          "joinDateRange": false
-        }
-      })}
-    />
-  );
 };
 
 export default Chart

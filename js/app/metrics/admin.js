@@ -1,6 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import cubejs from '@cubejs-client/core'
+import { CubeProvider } from '@cubejs-client/react'
 import { Provider } from 'react-redux'
 
 import Dashboard from './components/Dashboard'
@@ -30,7 +31,9 @@ if (rootElement) {
 
   createRoot(rootElement).render(
     <Provider store={ store }>
-      <Dashboard cubeApi={ cubeApi } />
+      <CubeProvider cubeApi={ cubeApi }>
+        <Dashboard />
+      </CubeProvider>
     </Provider>
   )
 }

@@ -8,25 +8,25 @@ import OrderCountPerHourRange from './OrderCountPerHourRange'
 import OrderCountPerZone from './OrderCountPerZone'
 import ChartPanel from './ChartPanel'
 
-const Dashboard = ({ cubeApi, dateRange }) => {
+const Dashboard = ({ dateRange }) => {
 
   return (
     <div>
       <div className="metrics-grid">
         <ChartPanel title="Best restaurants">
-          <BestRestaurants cubeApi={ cubeApi } dateRange={ dateRange } />
+          <BestRestaurants dateRange={ dateRange } />
         </ChartPanel>
         <ChartPanel title="Average order total">
-          <AverageCart cubeApi={ cubeApi } dateRange={ dateRange } />
+          <AverageCart dateRange={ dateRange } />
         </ChartPanel>
         <ChartPanel title="Number of orders per day of week">
-          <OrderCountPerDayOfWeek cubeApi={ cubeApi } dateRange={ dateRange } />
+          <OrderCountPerDayOfWeek dateRange={ dateRange } />
         </ChartPanel>
         <ChartPanel title="Number of orders per hour range">
-          <OrderCountPerHourRange cubeApi={ cubeApi } dateRange={ dateRange } />
+          <OrderCountPerHourRange dateRange={ dateRange } />
         </ChartPanel>
         <ChartPanel title="Number of orders per zone">
-          <OrderCountPerZone cubeApi={ cubeApi } dateRange={ dateRange } />
+          <OrderCountPerZone dateRange={ dateRange } />
         </ChartPanel>
       </div>
     </div>

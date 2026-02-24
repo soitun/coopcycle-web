@@ -8,7 +8,7 @@ import ProfitabilityHeatmap from './ProfitabilityHeatmap'
 import ProfitabilityBars from './ProfitabilityBars'
 import ChartPanel from './ChartPanel'
 
-const Dashboard = ({ cubeApi, dateRange }) => {
+const Dashboard = ({ dateRange }) => {
 
   const [ fixedCosts, setFixedCosts ] = useState(0)
   const { t } = useTranslation()
@@ -22,10 +22,10 @@ const Dashboard = ({ cubeApi, dateRange }) => {
       </Form.Item>
       <div className="metrics-grid">
         <ChartPanel title="Income per day of week and hour range" className="d-block">
-          <ProfitabilityHeatmap cubeApi={ cubeApi } dateRange={ dateRange } fixedCosts={ fixedCosts } />
+          <ProfitabilityHeatmap dateRange={ dateRange } fixedCosts={ fixedCosts } />
         </ChartPanel>
         <ChartPanel title="Income per week">
-          <ProfitabilityBars cubeApi={ cubeApi } dateRange={ dateRange } fixedCosts={ fixedCosts } />
+          <ProfitabilityBars dateRange={ dateRange } fixedCosts={ fixedCosts } />
         </ChartPanel>
       </div>
     </div>

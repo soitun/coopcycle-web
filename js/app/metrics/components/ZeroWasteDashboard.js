@@ -4,13 +4,13 @@ import { connect } from 'react-redux'
 import ZeroWasteOrderCount from './ZeroWasteOrderCount'
 import ChartPanel from './ChartPanel'
 
-const Dashboard = ({ cubeApi, dateRange }) => {
+const Dashboard = ({ dateRange }) => {
 
   return (
     <div>
       <div className="metrics-grid">
         <ChartPanel title="Zero waste orders">
-          <ZeroWasteOrderCount cubeApi={ cubeApi } dateRange={ dateRange } />
+          <ZeroWasteOrderCount dateRange={ dateRange } />
         </ChartPanel>
       </div>
     </div>
