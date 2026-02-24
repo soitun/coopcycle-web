@@ -83,15 +83,12 @@ services:
 
   AppBundle\Serializer\JsonLd\ProductNormalizer:
     arguments:
-      - "@api_platform.jsonld.normalizer.item"
-      - "@sylius.locale_provider"
+      $normalizer: "@api_platform.jsonld.normalizer.item"
     tags: [ { name: serializer.normalizer, priority: 128 } ]
 
   AppBundle\Serializer\JsonLd\RestaurantMenuNormalizer:
     arguments:
-      - "@api_platform.jsonld.normalizer.item"
-      - '@AppBundle\Serializer\JsonLd\ProductNormalizer'
-      - "@sylius.locale_provider"
+      $normalizer: "@api_platform.jsonld.normalizer.item"
     tags: [ { name: serializer.normalizer, priority: 128 } ]
 
   AppBundle\Serializer\TsRangeNormalizer:

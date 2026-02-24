@@ -19,6 +19,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Comparable;
 use Sylius\Component\Product\Model\ProductInterface;
 use Sylius\Component\Taxonomy\Model\Taxon as BaseTaxon;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ApiResource(
     shortName: 'Menu',
@@ -26,7 +28,8 @@ use Sylius\Component\Taxonomy\Model\Taxon as BaseTaxon;
     operations: [
         new Get(
             uriTemplate: '/restaurants/menus/{id}',
-            provider: RestaurantMenuProvider::class
+            provider: RestaurantMenuProvider::class,
+            normalizationContext: ['groups' => ['restaurant_menu']],
         ),
         new Delete(
             uriTemplate: '/restaurants/menus/{id}',
@@ -71,7 +74,7 @@ use Sylius\Component\Taxonomy\Model\Taxon as BaseTaxon;
             security: 'is_granted("edit", object)'
         ),
     ],
-    normalizationContext: ['groups' => ['restaurant']]
+    normalizationContext: ['groups' => ['restaurant_menu']]
 )]
 class Taxon extends BaseTaxon implements Comparable
 {
@@ -157,5 +160,17 @@ class Taxon extends BaseTaxon implements Comparable
     public function compareTo($other)
     {
         return $this->code === $other->getCode();
+    }
+
+    #[Groups(['restaurant_menu', 'restaurant_menus'])]
+    public function getMenuChildren()
+    {
+        return $this->isRoot() ? $this->getChildren() : $this->getProducts();
+    }
+
+    #[Groups(['restaurant_menu', 'restaurant_menus'])]
+    public function getIdentifier()
+    {
+        return $this->getCode();
     }
 }

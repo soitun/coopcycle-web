@@ -442,22 +442,22 @@ Feature: Manage restaurants
     """
     {
       "@context":"/api/contexts/Menu",
-      "@id":"@string@.startsWith('/api/restaurants/menus')",
+      "@id":"/api/restaurants/menus/1",
       "@type":"http://schema.org/Menu",
       "name":@string@,
       "identifier":@string@,
       "hasMenuSection":[
         {
           "@id":"/api/restaurants/menus/1/sections/2",
+          "@type":"MenuSection",
+          "identifier":@string@,
           "name":"Pizzas",
           "description":null,
           "hasMenuItem":[
             {
               "@type":"MenuItem",
-              "@context":"/api/contexts/Product",
               "@id":"/api/products/1",
               "name":"Pizza",
-              "description":null,
               "identifier":"PIZZA",
               "enabled":@boolean@,
               "reusablePackagingEnabled":@boolean@,
@@ -500,15 +500,15 @@ Feature: Manage restaurants
         },
         {
           "@id":"/api/restaurants/menus/1/sections/3",
+          "@type":"MenuSection",
+          "identifier":@string@,
           "name":"Burgers",
           "description":null,
           "hasMenuItem":[
             {
               "@type":"MenuItem",
-              "@context":"/api/contexts/Product",
               "@id":"/api/products/2",
               "name":"Hamburger",
-              "description":null,
               "identifier":"HAMBURGER",
               "enabled":@boolean@,
               "reusablePackagingEnabled":@boolean@,
@@ -782,7 +782,6 @@ Feature: Manage restaurants
             "id":@integer@,
             "code":@string@,
             "name":@string@,
-            "description":null,
             "enabled":@boolean@,
             "identifier":@string@,
             "reusablePackagingEnabled":@boolean@,
@@ -798,7 +797,6 @@ Feature: Manage restaurants
             "id":@integer@,
             "code":@string@,
             "name":@string@,
-            "description":null,
             "enabled":@boolean@,
             "identifier":@string@,
             "reusablePackagingEnabled":@boolean@,
@@ -849,7 +847,8 @@ Feature: Manage restaurants
                 "price":0,
                 "code":@string@,
                 "value":@string@,
-                "enabled":@boolean@
+                "enabled":@boolean@,
+                "name":@string@
               },
               {
                 "@id":"@string@.startsWith('/api/product_option_values')",
@@ -857,7 +856,8 @@ Feature: Manage restaurants
                 "price":0,
                 "code":@string@,
                 "value":@string@,
-                "enabled":@boolean@
+                "enabled":@boolean@,
+                "name":@string@
               },
               {
                 "@id":"@string@.startsWith('/api/product_option_values')",
@@ -865,7 +865,8 @@ Feature: Manage restaurants
                 "price":0,
                 "code":@string@,
                 "value":@string@,
-                "enabled":@boolean@
+                "enabled":@boolean@,
+                "name":@string@
               }],
             "name":"Pizza topping"
           },
@@ -883,7 +884,8 @@ Feature: Manage restaurants
                 "price":0,
                 "code":"GLUTEN_FREE",
                 "value":"Gluten free",
-                "enabled":true
+                "enabled":true,
+                "name":@string@
               }
             ],
             "name":"Gluten intolerance"
@@ -921,7 +923,6 @@ Feature: Manage restaurants
             "id":@integer@,
             "code":@string@,
             "name":@string@,
-            "description":null,
             "enabled":@boolean@,
             "identifier":@string@,
             "reusablePackagingEnabled":@boolean@,
@@ -1107,7 +1108,8 @@ Feature: Manage restaurants
         "@id":"/api/restaurants/menus/1",
         "@type":"http://schema.org/Menu",
         "name":"Default",
-        "identifier":"@string@"
+        "identifier":"@string@",
+        "hasMenuSection": []
       }
       """
 
@@ -1147,7 +1149,8 @@ Feature: Manage restaurants
         "@id":"/api/restaurants/menus/4",
         "@type":"http://schema.org/Menu",
         "name":"Other",
-        "identifier":"@string@"
+        "identifier":"@string@",
+        "hasMenuSection": []
       }
       """
     And I add "Accept" header equal to "application/ld+json"
@@ -1221,11 +1224,9 @@ Feature: Manage restaurants
         "identifier": @string@,
         "hasMenuItem": [
           {
-            "@context": "/api/contexts/Product",
             "@id": "/api/products/3",
             "@type": "MenuItem",
             "name":"Salad",
-            "description":null,
             "identifier":"SALAD",
             "enabled":false,
             "reusablePackagingEnabled":false,
@@ -1233,11 +1234,9 @@ Feature: Manage restaurants
             "images":[]
           },
           {
-            "@context": "/api/contexts/Product",
             "@id": "/api/products/4",
             "@type": "MenuItem",
             "name":"Cake",
-            "description":null,
             "identifier":"CAKE",
             "enabled":false,
             "reusablePackagingEnabled":false,
@@ -1270,11 +1269,9 @@ Feature: Manage restaurants
         "identifier": @string@,
         "hasMenuItem": [
           {
-            "@context": "/api/contexts/Product",
             "@id": "/api/products/3",
             "@type":"MenuItem",
             "name":"Salad",
-            "description":null,
             "identifier":"SALAD",
             "enabled":false,
             "reusablePackagingEnabled":false,
@@ -1308,11 +1305,9 @@ Feature: Manage restaurants
         "identifier": @string@,
         "hasMenuItem": [
           {
-            "@context": "/api/contexts/Product",
             "@id": "/api/products/4",
             "@type":"MenuItem",
             "name":"Cake",
-            "description":null,
             "identifier":"CAKE",
             "enabled":false,
             "reusablePackagingEnabled":false,
@@ -1320,11 +1315,9 @@ Feature: Manage restaurants
             "images":[]
           },
           {
-            "@context": "/api/contexts/Product",
             "@id": "/api/products/3",
             "@type":"MenuItem",
             "name":"Salad",
-            "description":null,
             "identifier":"SALAD",
             "enabled":false,
             "reusablePackagingEnabled":false,
@@ -1376,24 +1369,32 @@ Feature: Manage restaurants
         "hasMenuSection": [
           {
             "@id":"/api/restaurants/menus/1/sections/2",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Pizzas",
             "description":null,
             "hasMenuItem": @array@
           },
           {
             "@id":"/api/restaurants/menus/1/sections/3",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Burgers",
             "description":null,
             "hasMenuItem": @array@
           },
           {
             "@id":"/api/restaurants/menus/1/sections/4",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Salads",
             "description":null,
             "hasMenuItem": @array@
           },
           {
             "@id":"/api/restaurants/menus/1/sections/5",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Desserts",
             "description":null,
             "hasMenuItem": @array@
@@ -1427,24 +1428,32 @@ Feature: Manage restaurants
         "hasMenuSection": [
             {
               "@id":"/api/restaurants/menus/1/sections/4",
+              "@type":"MenuSection",
+              "identifier":@string@,
               "name": "Salads",
               "description":null,
               "hasMenuItem": @array@
             },
             {
               "@id":"/api/restaurants/menus/1/sections/5",
+              "@type":"MenuSection",
+              "identifier":@string@,
               "name": "Desserts",
               "description":null,
               "hasMenuItem": @array@
             },
             {
               "@id":"/api/restaurants/menus/1/sections/2",
+              "@type":"MenuSection",
+              "identifier":@string@,
               "name": "Pizzas",
               "description":null,
               "hasMenuItem": @array@
             },
             {
               "@id":"/api/restaurants/menus/1/sections/3",
+              "@type":"MenuSection",
+              "identifier":@string@,
               "name": "Burgers",
               "description":null,
               "hasMenuItem": @array@
@@ -1468,24 +1477,32 @@ Feature: Manage restaurants
         "hasMenuSection": [
           {
             "@id":"/api/restaurants/menus/1/sections/4",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Salads",
             "description":null,
             "hasMenuItem": @array@
           },
           {
             "@id":"/api/restaurants/menus/1/sections/5",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Desserts",
             "description":null,
             "hasMenuItem": @array@
           },
           {
             "@id":"/api/restaurants/menus/1/sections/2",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Pizzas",
             "description":null,
             "hasMenuItem": @array@
           },
           {
             "@id":"/api/restaurants/menus/1/sections/3",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Burgers",
             "description":null,
             "hasMenuItem": @array@
@@ -1529,12 +1546,16 @@ Feature: Manage restaurants
         "hasMenuSection": [
           {
             "@id":"/api/restaurants/menus/1/sections/2",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Pizzas",
             "description":null,
             "hasMenuItem": "@array@.count(1)"
           },
           {
             "@id":"/api/restaurants/menus/1/sections/3",
+            "@type":"MenuSection",
+            "identifier":@string@,
             "name": "Burger",
             "description":null,
             "hasMenuItem": "@array@.count(1)"
@@ -1583,12 +1604,16 @@ Feature: Manage restaurants
         "hasMenuSection": [
             {
               "@id":"/api/restaurants/menus/1/sections/2",
+              "@type":"MenuSection",
+              "identifier":@string@,
               "name": "Pizzas",
               "description":null,
               "hasMenuItem": "@array@.count(0)"
             },
             {
               "@id":"/api/restaurants/menus/1/sections/3",
+              "@type":"MenuSection",
+              "identifier":@string@,
               "name": "Burger",
               "description":null,
               "hasMenuItem": "@array@.count(2)"

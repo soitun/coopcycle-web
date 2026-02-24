@@ -1733,3 +1733,9 @@ services:
       - '@.inner'
       - '%sylius.promotion_rules%'
       - ['is_customer', 'is_restaurant']
+
+  # Custom NameConverter, mainly for Taxon class
+  AppBundle\Serializer\NameConverter:
+    decorates: api_platform.name_converter
+    arguments:
+      - '@.inner'

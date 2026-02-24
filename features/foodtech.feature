@@ -511,7 +511,8 @@ Feature: Food Tech
         "price":0,
         "code":"PIZZA_TOPPING_PEPPERONI",
         "enabled":false,
-        "value":"Pepperoni"
+        "value":"Pepperoni",
+        "name":@string@
       }
       """
 
@@ -547,7 +548,8 @@ Feature: Food Tech
         "price":0,
         "code":"NOT_ENABLED_OPTION",
         "enabled":true,
-        "value":"Not enabled"
+        "value":"Not enabled",
+        "name":@string@
       }
       """
 

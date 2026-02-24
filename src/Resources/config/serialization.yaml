@@ -30,9 +30,9 @@ AppBundle\Entity\Sylius\Customer:
 
 AppBundle\Entity\Sylius\Taxon:
   attributes:
-    code:
-      groups: ['restaurant_menu', 'restaurant_menus']
     name:
+      groups: ['restaurant_menu', 'restaurant_menus']
+    description:
       groups: ['restaurant_menu', 'restaurant_menus']
 
 AppBundle\Entity\Sylius\OrderEvent:
@@ -147,13 +147,15 @@ Sylius\Component\Product\Model\Product:
     id:
       groups: ['product']
     name:
-      groups: ['product']
+      groups: ['product', 'restaurant_menu']
     description:
-      groups: ['product']
+      groups: ['product', 'restaurant_menu']
     code:
       groups: ['product']
     enabled:
-      groups: ['product', 'product_update']
+      groups: ['product', 'product_update', 'restaurant_menu']
+    reusablePackagingEnabled:
+      groups: ['product', 'restaurant_menu']
 
 Sylius\Component\Product\Model\ProductVariant:
   attributes:
@@ -167,7 +169,7 @@ Sylius\Component\Product\Model\ProductVariant:
 Sylius\Component\Product\Model\ProductOption:
   attributes:
     name:
-      groups: ['product_option']
+      groups: ['product_option', 'restaurant_menu']
     code:
       groups: ['product_option']
     values:
@@ -175,12 +177,14 @@ Sylius\Component\Product\Model\ProductOption:
     strategy:
       groups: ['product_option']
     additional:
-      groups: ['product_option']
+      groups: ['product_option', 'restaurant_menu']
     valuesRange:
       groups: ['product_option']
 
 Sylius\Component\Product\Model\ProductOptionValue:
   attributes:
+    name:
+      groups: ['product_option']
     value:
       groups: ['product_option']
     code:
