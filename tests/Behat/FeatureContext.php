@@ -338,6 +338,14 @@ class FeatureContext implements Context, SnippetAcceptingContext
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
 
+        // Ensure the Redis stream consumer group exists before consuming.
+        // The @BeforeScenario clearData() flushes Redis, which destroys consumer groups.
+        // When messages are dispatched they recreate the stream (via XADD) but not the
+        // consumer group, causing XREADGROUP to fail with "NOGROUP" error.
+        $setupCommand = $application->find('messenger:setup-transports');
+        $setupCommandTester = new CommandTester($setupCommand);
+        $setupCommandTester->execute([]);
+
         $command = $application->find('messenger:consume');
         $commandTester = new CommandTester($command);
 
