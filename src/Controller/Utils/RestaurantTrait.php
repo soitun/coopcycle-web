@@ -66,6 +66,7 @@ use Sylius\Component\Order\Model\OrderInterface;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Product\Model\ProductTranslation;
+use Sylius\Component\Product\Model\ProductOptionTranslation;
 use Sylius\Component\Product\Repository\ProductOptionRepositoryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Promotion\Checker\Eligibility\PromotionEligibilityCheckerInterface;
@@ -840,7 +841,8 @@ trait RestaurantTrait
     }
 
     #[HideSoftDeleted]
-    public function restaurantProductOptionsAction($id, Request $request, PaginatorInterface $paginator)
+    public function restaurantProductOptionsAction($id, Request $request,
+        PaginatorInterface $paginator)
     {
         $restaurant = $this->entityManager
             ->getRepository(LocalBusiness::class)
@@ -851,16 +853,43 @@ trait RestaurantTrait
         $qb = $this->entityManager
             ->getRepository(ProductOption::class)
             ->createQueryBuilder('opt')
+            ->innerJoin(ProductOptionTranslation::class, 't', Expr\Join::WITH, 't.translatable = opt.id')
             ->andWhere('opt.restaurant = :restaurant')
             ->setParameter('restaurant', $restaurant);
 
-        $routes = $request->attributes->get('routes');
+        $qb->addOrderBy('t.name', 'ASC');
+
+        if ($request->query->has('q')) {
+            $qb
+                ->andWhere('LOWER(t.name) LIKE :q')
+                ->setParameter('q', '%' . strtolower($request->query->get('q')) . '%');
+        }
 
         $options = $paginator->paginate(
             $qb,
             $request->query->getInt('page', 1),
             10
         );
+
+        $routes = $request->attributes->get('routes');
+
+        $request->attributes->get('_route');
+
+        if ('json' === $request->query->get('format')) {
+
+            $results = [];
+            foreach ($options as $option) {
+                $results[] = [
+                    'name' => $option->getName(),
+                    'path' => $this->generateUrl($routes['product_option'], [
+                        'restaurantId' => $restaurant->getId(),
+                        'optionId' => $option->getId()
+                    ]),
+                ];
+            }
+
+            return new JsonResponse($results);
+        }
 
         return $this->render($request->attributes->get('template'), $this->withRoutes([
             'layout' => $request->attributes->get('layout'),
