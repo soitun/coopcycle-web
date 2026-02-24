@@ -702,6 +702,9 @@ trait RestaurantTrait
         LoopeatClient $loopeatClient,
         bool $taxIncl)
     {
+        // Hotfix for catalogs with 100+ options
+        ini_set('memory_limit', '512M');
+
         $filterCollection = $entityManager->getFilters();
         if ($filterCollection->isEnabled('disabled_filter')) {
             $filterCollection->disable('disabled_filter');
