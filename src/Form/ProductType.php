@@ -395,8 +395,12 @@ class ProductType extends AbstractType
 
     private function postSubmitOptions(Product $product, FormInterface $form)
     {
+        $optionIds = array_column($form->getData(), 'option');
+        $optionEntities = $this->entityManager->getRepository(ProductOption::class)
+            ->findBy(['id' => $optionIds]);
+
         $optionsHash = [];
-        foreach ($product->getRestaurant()->getProductOptions() as $option) {
+        foreach ($optionEntities as $option) {
             $optionsHash[$option->getId()] = $option;
         }
 
