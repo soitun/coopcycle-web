@@ -69,7 +69,7 @@
 <script>
 new CoopCycle.Search(document.querySelector('#user-search'), {
   url: "{{ path('admin_users_search', { format: 'json'  }) }}",
-  placeholder: "Rechercher un utilisateur…",
+  placeholder: "{{ 'search.users'|trans }}",
   onSuggestionSelected: function(suggestion) {
     $('#add_user_user').val(suggestion.id);
     $('#add_user_user').closest('form').submit();
