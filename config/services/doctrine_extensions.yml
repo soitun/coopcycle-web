@@ -97,6 +97,8 @@ services:
 
 
     AppBundle\Doctrine\EventSubscriber\PostSoftDeleteSubscriber:
+        arguments:
+            $messageBus: "@event.bus"
         tags:
             # FIXME
             # doctrine.event_subscriber is deprecated, but this doesn't work

@@ -69,3 +69,4 @@ framework:
             'AppBundle\Message\Order\ProcessOrderAfterTaskCancellation': async
             'AppBundle\Message\EnableProduct': async
             'AppBundle\Message\ResetRushMode': async
+            'AppBundle\Message\SoftDelete\CleanupProductOption': async
