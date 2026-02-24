@@ -627,6 +627,12 @@ trait RestaurantTrait
         $qb->andWhere('p.restaurant = :restaurant');
         $qb->setParameter('restaurant', $restaurant);
 
+        if ($request->query->has('q')) {
+            $qb
+                ->andWhere('LOWER(t.name) LIKE :q')
+                ->setParameter('q', '%' . strtolower($request->query->get('q')) . '%');
+        }
+
         $products = $paginator->paginate(
             $qb,
             $request->query->getInt('page', 1),
@@ -639,6 +645,18 @@ trait RestaurantTrait
         );
 
         $routes = $request->attributes->get('routes');
+
+        if ('json' === $request->query->get('format')) {
+            $results = array_map(fn ($p) => [
+                'name' => $p->getName(),
+                'path' => $this->generateUrl($routes['product'], [
+                    'restaurantId' => $restaurant->getId(),
+                    'productId' => $p->getId(),
+                ]),
+            ], iterator_to_array($products));
+
+            return new JsonResponse($results);
+        }
 
         $copyForm = $this->createFormBuilder()
             ->add('restaurant', ChoiceType::class, [
