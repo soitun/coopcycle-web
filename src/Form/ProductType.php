@@ -250,11 +250,7 @@ class ProductType extends AbstractType
             }
 
             if ($form->has('options')) {
-                $opts = $form->get('options')->getData();
-                foreach ($opts as $opt) {
-                    $product->addOptionAt($opt['option'], $opt['position']);
-                    $product->setOptionEnabled($opt['option'], $opt['enabled']);
-                }
+                $this->postSubmitOptions($product, $form->get('options'));
             }
 
             $priceFormName = $this->taxIncl ? 'taxIncluded' : 'taxExcluded';
@@ -395,6 +391,28 @@ class ProductType extends AbstractType
         $variant->setBusinessRestaurantGroup($businessRestaurantGroupPrice->getBusinessRestaurantGroup());
 
         $product->addVariant($variant);
+    }
+
+    private function postSubmitOptions(Product $product, FormInterface $form)
+    {
+        $optionIds = array_column($form->getData(), 'option');
+        $optionEntities = $this->entityManager->getRepository(ProductOption::class)
+            ->findBy(['id' => $optionIds]);
+
+        $optionsHash = [];
+        foreach ($optionEntities as $option) {
+            $optionsHash[$option->getId()] = $option;
+        }
+
+        foreach ($form->getData() as $opt) {
+
+            $option = $optionsHash[$opt['option']] ?? null;
+
+            if ($option) {
+                $product->addOptionAt($option, (int) ($opt['position'] ?? 0));
+                $product->setOptionEnabled($option, $opt['enabled']);
+            }
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
