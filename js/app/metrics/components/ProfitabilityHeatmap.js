@@ -205,9 +205,9 @@ const App = ({ dateRange, fixedCosts }) => {
 
 };
 
-const ChartRenderer = ({ cubejsApi, dateRange, fixedCosts = 0 }) => {
+const ChartRenderer = ({ cubeApi, dateRange, fixedCosts = 0 }) => {
   return (
-    <CubeProvider cubeApi={cubejsApi}>
+    <CubeProvider cubeApi={cubeApi}>
       <App dateRange={ dateRange } fixedCosts={ fixedCosts } />
     </CubeProvider>
   )

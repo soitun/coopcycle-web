@@ -224,7 +224,7 @@ const renderChart = ({ resultSet, error, pivotConfig }) => {
 
 };
 
-const ChartRenderer = ({ cubejsApi, dateRange, tags }) => {
+const ChartRenderer = ({ cubeApi, dateRange, tags }) => {
   return (
   <QueryRenderer
     query={{
@@ -251,7 +251,7 @@ const ChartRenderer = ({ cubejsApi, dateRange, tags }) => {
       "limit": 5000,
       "segments": []
     }}
-    cubejsApi={cubejsApi}
+    cubeApi={cubeApi}
     resetResultSetOnChange={false}
     render={(props) => renderChart({
       ...props,

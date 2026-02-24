@@ -46,7 +46,7 @@ const renderChart = ({ resultSet, error }) => {
 
 };
 
-const Chart = ({ cubejsApi, dateRange, tags }) => {
+const Chart = ({ cubeApi, dateRange, tags }) => {
   return (
     <QueryRenderer
       query={{
@@ -65,7 +65,7 @@ const Chart = ({ cubejsApi, dateRange, tags }) => {
           "Task.date": "asc"
         }
       }}
-      cubejsApi={cubejsApi}
+      cubeApi={cubeApi}
       resetResultSetOnChange={false}
       render={(props) => renderChart({
         ...props,

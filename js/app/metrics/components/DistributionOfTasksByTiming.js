@@ -186,7 +186,7 @@ const renderChart = ({ resultSet, error, pivotConfig, taskType }) => {
 
 };
 
-const ChartRenderer = ({ cubejsApi, dateRange, taskType }) => {
+const ChartRenderer = ({ cubeApi, dateRange, taskType }) => {
   return (
     <QueryRenderer
       query={{
@@ -213,7 +213,7 @@ const ChartRenderer = ({ cubejsApi, dateRange, taskType }) => {
         ],
         "filters": []
       }}
-      cubejsApi={cubejsApi}
+      cubeApi={cubeApi}
       resetResultSetOnChange={false}
       render={(props) => renderChart({
         ...props,

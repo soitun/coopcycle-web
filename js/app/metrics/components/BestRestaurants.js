@@ -51,7 +51,7 @@ const renderChart = ({ resultSet, error }) => {
   return <Pie data={data} options={options} />;
 };
 
-const Chart = ({ cubejsApi, dateRange }) => {
+const Chart = ({ cubeApi, dateRange }) => {
 
   return (
     <QueryRenderer
@@ -85,7 +85,7 @@ const Chart = ({ cubejsApi, dateRange }) => {
         },
         "limit": 10
       }}
-      cubejsApi={cubejsApi}
+      cubeApi={cubeApi}
       resetResultSetOnChange={false}
       render={(props) => renderChart({
         ...props,

@@ -23,14 +23,14 @@ if (rootElement) {
     uiTasksMetricsEnabled,
   })
 
-  const cubejsApi = cubejs(
+  const cubeApi = cubejs(
     rootElement.dataset.token,
     { apiUrl: rootElement.dataset.apiUrl }
   );
 
   createRoot(rootElement).render(
     <Provider store={ store }>
-      <Dashboard cubejsApi={ cubejsApi } />
+      <Dashboard cubeApi={ cubeApi } />
     </Provider>
   )
 }

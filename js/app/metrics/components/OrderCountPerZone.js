@@ -14,7 +14,7 @@ if (el) {
   center = [ parseFloat(latitude), parseFloat(longitude) ]
 }
 
-const Chart = ({ cubejsApi, dateRange }) => {
+const Chart = ({ cubeApi, dateRange }) => {
 
   const [ map, setMap ] = useState(null)
   const [ tileLayer, setTileLayer ] = useState(null)
@@ -30,7 +30,7 @@ const Chart = ({ cubejsApi, dateRange }) => {
 
   useEffect(() => {
 
-    cubejsApi
+    cubeApi
       .load({
         "dimensions": [
           "CityZone.polygon",
