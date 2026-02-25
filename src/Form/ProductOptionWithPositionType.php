@@ -25,19 +25,6 @@ class ProductOptionWithPositionType extends AbstractType
                 ]
             ]);
 
-        $builder
-            ->get('option')
-            ->addModelTransformer(new CallbackTransformer(
-                function ($entity) {
-                    if (is_callable([ $entity, 'getId' ])) {
-                        return $entity->getId();
-                    }
-                },
-                // Do *NOT* return the object
-                // to avoid using too much memory on submit
-                fn ($id) => $id
-            ));
-
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
 
             $form = $event->getForm();
@@ -46,7 +33,7 @@ class ProductOptionWithPositionType extends AbstractType
             $form
                 ->add('enabled', CheckboxType::class, [
                     'required' => false,
-                    'label' => $data['option']->getName(),
+                    'label' => $data['name'],
                     'data' => $data['enabled'],
                 ]);
         });
