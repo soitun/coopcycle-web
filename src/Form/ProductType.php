@@ -395,23 +395,21 @@ class ProductType extends AbstractType
 
     private function postSubmitOptions(Product $product, FormInterface $form)
     {
-        $optionIds = array_column($form->getData(), 'option');
-        $optionEntities = $this->entityManager->getRepository(ProductOption::class)
-            ->findBy(['id' => $optionIds]);
+        // Index the array by option id
+        $data = array_column($form->getData(), null, 'option');
 
-        $optionsHash = [];
-        foreach ($optionEntities as $option) {
-            $optionsHash[$option->getId()] = $option;
-        }
+        $qb = $this->entityManager->getRepository(ProductOption::class)
+            ->createQueryBuilder('opt')
+            ->andWhere('opt.id IN (:ids)')
+            ->setParameter('ids', array_keys($data));
 
-        foreach ($form->getData() as $opt) {
-
-            $option = $optionsHash[$opt['option']] ?? null;
-
-            if ($option) {
-                $product->addOptionAt($option, (int) ($opt['position'] ?? 0));
-                $product->setOptionEnabled($option, $opt['enabled']);
-            }
+        // https://www.doctrine-project.org/projects/doctrine-orm/en/2.20/reference/batch-processing.html#iterating-large-results-for-data-processing
+        $query = $qb->getQuery();
+        foreach ($query->toIterable() as $option) {
+            $product->addOptionAt($option, (int) ($data[$option->getId()]['position'] ?? 0));
+            $product->setOptionEnabled($option, $data[$option->getId()]['enabled']);
+            // FIXME Doesn't work, produces duplicate key
+            // $this->entityManager->detach($option);
         }
     }
 
