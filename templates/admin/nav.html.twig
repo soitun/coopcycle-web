@@ -43,14 +43,6 @@
             <span class="navbar-label">{% trans %}adminDashboard.deliveries.title{% endtrans %}</span>
           </a>
         </li>
-        {% if coopcycle_setting('b2b_enabled') %}
-        <li data-toggle="tooltip" data-placement="bottom" title="{% trans %}adminDashboard.tooltip.organizations{% endtrans %}">
-          <a class="admin-navbar__link" href="{{ path('admin_organizations') }}">
-            <i class="fa fa-building-o"></i>
-            <span class="navbar-label">{% trans %}adminDashboard.organizations.title{% endtrans %}</span>
-          </a>
-        </li>
-        {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
         <li data-toggle="tooltip" data-placement="bottom" title="{% trans %}adminDashboard.tooltip.restaurants{% endtrans %}">
           <a class="admin-navbar__link" href="{{ path('admin_restaurants') }}">
