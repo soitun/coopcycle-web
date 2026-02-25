@@ -279,9 +279,6 @@ services:
         colisactiv_all: '@colisactiv_all'
     tags: [ form.type ]
 
-  AppBundle\Form\Order\AdhocOrderType:
-    tags: [ form.type ]
-
   AppBundle\Form\InviteUserType:
     arguments:
       - '@security.authorization_checker'

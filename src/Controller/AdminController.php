@@ -210,7 +210,6 @@ class AdminController extends AbstractController
         protected UploaderHelper $uploaderHelper,
         protected bool $optinExportUsersEnabled,
         protected CollectionFinderInterface $typesenseShopsFinder,
-        protected bool $adhocOrderEnabled,
         protected Filesystem $incidentImagesFilesystem,
         protected Filesystem $edifactFilesystem,
         protected PricingRuleSetManager $pricingRuleSetManager,

@@ -19,7 +19,6 @@ Encore
   // .setManifestKeyPrefix('/build')
 
   .addEntry('app', './assets/app.js')
-  .addEntry('adhoc-order', './js/app/adhoc_order/index.js')
   .addEntry('admin-cube', './js/app/admin/cube.js')
   .addEntry('admin-orders', './js/app/admin/orders.js')
   .addEntry('admin-restaurants', './js/app/admin/restaurants.js')

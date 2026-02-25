@@ -346,38 +346,6 @@ trait RestaurantTrait
         return $this->renderRestaurantForm($restaurant, $request, $validator, $jwtEncoder, $iriConverter, $translator, $loopeatClient, $appCache);
     }
 
-    public function restaurantNewAdhocOrderAction($restaurantId, Request $request,
-        JWTTokenManagerInterface $jwtManager)
-    {
-        $restaurant = $this->entityManager
-            ->getRepository(LocalBusiness::class)
-            ->find($restaurantId);
-
-        $form = $this->createFormBuilder()
-            ->add('taxCategory', ProductTaxCategoryChoiceType::class)
-            ->getForm();
-
-        $view = $form->get('taxCategory')->createView();
-
-        $taxCategories = [];
-        foreach($view->vars['choices'] as $taxCategoryView) {
-            $taxCategories[] = [
-                'name' => $taxCategoryView->label,
-                'code' => $taxCategoryView->value,
-            ];
-        }
-
-        return $this->render($request->attributes->get('template'), $this->withRoutes([
-            'layout' => $request->attributes->get('layout'),
-            'restaurant_normalized' => $this->normalizer->normalize($restaurant, 'jsonld', [
-                'groups' => ['restaurant']
-            ]),
-            'restaurant' => $restaurant,
-            'jwt' => $jwtManager->create($this->getUser()),
-            'taxCategories' => $taxCategories,
-        ], []));
-    }
-
     public function restaurantDashboardAction($restaurantId, Request $request,
         EntityManagerInterface $entityManager,
         IriConverterInterface $iriConverter,

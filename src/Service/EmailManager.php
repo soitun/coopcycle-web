@@ -289,14 +289,4 @@ class EmailManager
 
         return $this->createHtmlMessageWithReplyTo($subject, $body);
     }
-
-    public function createAdhocOrderMessage(OrderInterface $order)
-    {
-        $subject = $this->translator->trans('order.created.subject', ['%order.number%' => $order->getNumber()], 'emails');
-        $body = $this->mjml->render($this->templating->render('emails/order/adhoc.mjml.twig', [
-            'order' => $order
-        ]));
-
-        return $this->createHtmlMessage($subject, $body);
-    }
 }

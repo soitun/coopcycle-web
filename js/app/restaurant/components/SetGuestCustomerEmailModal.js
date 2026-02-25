@@ -57,7 +57,7 @@ const SetGuestCustomerEmailModal = ({ isOpen, closeInvitePeopleToOrderModal, t, 
                   value={ values.email }
                   placeholder={ t('GROUP_ORDER_PLAYER_EMAIL_LABEL') } />
               </div>
-              <button type="submit" className="btn btn-md btn-block btn-primary">{ t('ADHOC_ORDER_SAVE') }</button>
+              <button type="submit" className="btn btn-md btn-block btn-primary">{ t('SAVE_BUTTON') }</button>
             </form>
           </div>
         )}

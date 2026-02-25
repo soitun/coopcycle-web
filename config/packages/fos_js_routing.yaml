@@ -61,7 +61,6 @@ fos_js_routing:
         - dashboard_restaurant_stats
         - routing_route
         - user_avatar
-        - dashboard_restaurant_new_adhoc_order
         - public_share_order
         - order_set_guest_customer_email
         - _api_/orders/{id}/players_post

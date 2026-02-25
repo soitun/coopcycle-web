@@ -37,7 +37,6 @@ class DashboardController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
-        private readonly bool $adhocOrderEnabled,
         private readonly JWTTokenManagerInterface $JWTTokenManager,
         protected NormalizerInterface $normalizer,
         protected SerializerInterface $serializer
