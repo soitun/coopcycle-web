@@ -31,7 +31,7 @@ AppBundle\Entity\Sylius\Customer:
 AppBundle\Entity\Sylius\Taxon:
   attributes:
     name:
-      groups: ['restaurant_menu', 'restaurant_menus']
+      groups: ['restaurant_menu', 'restaurant_menus', 'restaurant_menu_without_options']
     description:
       groups: ['restaurant_menu', 'restaurant_menus']
 
@@ -147,7 +147,7 @@ Sylius\Component\Product\Model\Product:
     id:
       groups: ['product']
     name:
-      groups: ['product', 'restaurant_menu']
+      groups: ['product', 'restaurant_menu', 'restaurant_menu_without_options']
     description:
       groups: ['product', 'restaurant_menu']
     code:

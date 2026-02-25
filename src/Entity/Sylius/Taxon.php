@@ -162,7 +162,7 @@ class Taxon extends BaseTaxon implements Comparable
         return $this->code === $other->getCode();
     }
 
-    #[Groups(['restaurant_menu', 'restaurant_menus'])]
+    #[Groups(['restaurant_menu', 'restaurant_menus', 'restaurant_menu_without_options'])]
     public function getMenuChildren()
     {
         return $this->isRoot() ? $this->getChildren() : $this->getProducts();
