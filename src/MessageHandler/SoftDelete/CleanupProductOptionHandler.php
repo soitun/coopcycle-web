@@ -34,6 +34,12 @@ class CleanupProductOptionHandler
         $restaurantRepository = $this->entityManager->getRepository(LocalBusiness::class);
 
         // Remove associations Product <-> ProductOption
+        // Make sure to also delete disabled options from Product
+        $filterCollection = $this->entityManager->getFilters();
+        if ($filterCollection->isEnabled('disabled_filter')) {
+            $filterCollection->disable('disabled_filter');
+        }
+
         $products = $productRepository->findByOption($entity);
         foreach ($products as $product) {
             foreach ($product->getProductOptions() as $productOption) {
