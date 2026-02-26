@@ -200,6 +200,15 @@ class RuleHumanizerTest extends KernelTestCase
         $this->assertEquals('Volume du colis moins de 5 - €1.00', $this->humanizer->humanize($rule));
     }
 
+    public function testPackagesTotalVolumeUnitsRange()
+    {
+        $rule = new PricingRule();
+        $rule->setExpression('packages.totalVolumeUnits() in 1..5');
+        $rule->setPrice('100');
+
+        $this->assertEquals('Volume du colis entre 1 vu et 5 vu - €1.00', $this->humanizer->humanize($rule));
+    }
+
     public function testAnd()
     {
         $rule = new PricingRule();
