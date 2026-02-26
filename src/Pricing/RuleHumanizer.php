@@ -195,11 +195,12 @@ class RuleHumanizer
                 '%right%' => $this->translator->trans($unitTranslationKey, ['%count%' => $matches[2]]),
             ]);
 
-            return $this->translator->trans('pricing.rule.humanizer.diff', [
+            // Use trim() to remove extra space at then because of empty %value%
+            return trim($this->translator->trans('pricing.rule.humanizer.diff', [
                 '%task_type%' => $taskType,
                 '%operator%' => $value,
                 '%value%' => '',
-            ]);
+            ]));
 
         } else {
             // Handle standard operators like "<", ">", etc.

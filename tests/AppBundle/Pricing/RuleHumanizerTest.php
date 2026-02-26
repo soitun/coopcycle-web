@@ -179,7 +179,7 @@ class RuleHumanizerTest extends KernelTestCase
         $rule->setExpression('diff_days(pickup, \'in 1..2\')');
         $rule->setPrice('100');
 
-        $this->assertEquals('Délai de préavis pour retrait entre 1 jour et 2 jours  - €1.00', $this->humanizer->humanize($rule));
+        $this->assertEquals('Délai de préavis pour retrait entre 1 jour et 2 jours - €1.00', $this->humanizer->humanize($rule));
     }
 
     public function testOrderItemsTotal()
