@@ -879,6 +879,7 @@ trait StoreTrait
         ]);
     }
 
+    #[HideSoftDeleted]
     public function storeAddressesAction($id, Request $request, TranslatorInterface $translator)
     {
         $store = $this->entityManager
@@ -908,7 +909,7 @@ trait StoreTrait
 
         $addressForm = $this->createStoreAddressForm($address);
 
-        return $this->render('store/addresses.html.twig', [
+        return $this->render('store/addresses.html.twig', $this->auth([
             'layout' => $request->attributes->get('layout'),
             'store' => $store,
             'form' => $form->createView(),
@@ -918,7 +919,7 @@ trait StoreTrait
             'stores_route' => $routes['stores'],
             'store_route' => $routes['store'],
             'store_addresses_route' => $routes['store_addresses'],
-        ]);
+        ]));
     }
 
     private function createStoreAddressForm(Address $address)
