@@ -1800,6 +1800,10 @@ services:
     tags:
       - { name: monolog.logger, channel: cyke }
 
+  AppBundle\Command\CykeResendDeliveriesCommand:
+    arguments:
+      $cykeEnabled: '%cyke_enabled%'
+
   AppBundle\MessageHandler\Task\NotifyLoopeat:
     arguments:
       - '@AppBundle\LoopEat\Client'
